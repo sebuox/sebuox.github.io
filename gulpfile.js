@@ -31,3 +31,6 @@ gulp.task('watch',function() {
     gulp.watch('wp-content/themes/themename/assets/sass/*.scss',['styles']);
     gulp.watch('wp-content/themes/themename/assets/js/*.js',['scripts']);
 });
+exports.default = series(scssTask, jsTask, browserSysnServe, watchTask);
+
+exports.build ) = series(scssTask, jsTask);
