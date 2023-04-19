@@ -1,41 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 .button {
-  position: relative;
   background-color: #90A4AE;
   border: none;
-  font-size: 28px;
-  color: #FFFFFF;
-  padding: 20px;
-  width: 200px;
+  color: white;
+  padding: 16px 32px;
   text-align: center;
-  transition-duration: 0.4s;
+  font-size: 18px;
+  margin: 4px 2px;
+  opacity: 0.6;
+  transition: 0.3s;
+  display: inline-block;
   text-decoration: none;
-  overflow: hidden;
   cursor: pointer;
 }
 
-.button:after {
-  content: "";
-  background: #f1f1f1;
-  display: block;
-  position: absolute;
-  padding-top: 300%;
-  padding-left: 350%;
-  margin-left: -20px !important;
-  margin-top: -120%;
-  opacity: 0;
-  transition: all 0.8s
-}
-
-.button:active:after {
-  padding: 0;
-  margin: 0;
-  opacity: 1;
-  transition: 0s
-}
+.button:hover {opacity: 1}
 </style>
 </head>
 <body>
