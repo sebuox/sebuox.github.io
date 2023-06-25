@@ -13,37 +13,22 @@
             ctx.drawImage(img, 0, 0);
             var imageData = ctx.getImageData(0, 0, img.width, img.height);
             var decodedMessage = '';
-
             var bitIndex = 0;
             var currentByte = 0;
-            var messageLength = 0;
-
-            // Extract the message length from the least significant bit of each color channel
-            for (var i = 0; i < 32; i++) {
-                var colorChannel = imageData.data[i] & 1;
-                messageLength |= (colorChannel << bitIndex);
-                bitIndex++;
-
-                if (bitIndex === 8) {
-                    bitIndex = 0;
-                }
-            }
 
             // Extract the message bits from the least significant bit of each color channel
-            for (var j = 32; j < imageData.data.length; j += 4) {
-                var colorChannel = imageData.data[j] & 1;
+            for (var i = 0; i < imageData.data.length; i += 4) {
+                var colorChannel = imageData.data[i] & 1;
                 currentByte |= (colorChannel << bitIndex);
                 bitIndex++;
 
                 if (bitIndex === 8) {
+                    if (currentByte === 0) {
+                        break;
+                    }
                     decodedMessage += String.fromCharCode(currentByte);
                     currentByte = 0;
                     bitIndex = 0;
-
-                    // Stop extracting bits if the message length is reached
-                    if (decodedMessage.length === messageLength) {
-                        break;
-                    }
                 }
             }
 
