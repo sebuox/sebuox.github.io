@@ -2,88 +2,34 @@
 <html>
 <head>
     <title>Steganography Example</title>
+    <script src="stegcloak.js"></script>
     <script>
         function encodeMessage() {
-            var image = document.getElementById('image');
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            canvas.width = image.width;
-            canvas.height = image.height;
-            ctx.drawImage(image, 0, 0);
-            
             var message = "Hello World"; // Message to encode
-            var bits = [];
+            var password = "secretpassword"; // Password for encoding
             
-            // Convert each character of the message to binary representation
-            for (var i = 0; i < message.length; i++) {
-                var charCode = message.charCodeAt(i);
-                var binary = charCode.toString(2).padStart(8, '0');
-                bits.push(...binary);
-            }
-            
-            // Modify the least significant bit of each pixel to encode the message
-            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var pixels = imageData.data;
-            var bitIndex = 0;
-            
-            for (var i = 0; i < pixels.length; i += 4) {
-                var pixel = pixels.slice(i, i + 4);
-                
-                // Modify the least significant bit of the red channel
-                pixel[0] = (pixel[0] & 0xFE) | parseInt(bits[bitIndex]);
-                bitIndex++;
-                
-                if (bitIndex >= bits.length) {
-                    break;
-                }
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
-            var encodedImage = canvas.toDataURL("image/png");
-            document.getElementById('encoded_image').src = encodedImage;
+            var encodedMessage = stegcloak.encode(message, password);
+            document.getElementById('encoded_message').innerText = encodedMessage;
         }
         
         function decodeMessage() {
-            var encodedImage = document.getElementById('encoded_image');
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            canvas.width = encodedImage.width;
-            canvas.height = encodedImage.height;
-            ctx.drawImage(encodedImage, 0, 0);
+            var encodedMessage = document.getElementById('encoded_message').innerText;
+            var password = "secretpassword"; // Password for decoding
             
-            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var pixels = imageData.data;
-            var bits = [];
-            
-            // Extract the least significant bit from each red channel
-            for (var i = 0; i < pixels.length; i += 4) {
-                var pixel = pixels.slice(i, i + 4);
-                var bit = pixel[0] & 1;
-                bits.push(bit);
-            }
-            
-            var message = '';
-            
-            // Convert the binary bits back to characters
-            for (var i = 0; i < bits.length; i += 8) {
-                var binary = bits.slice(i, i + 8).join('');
-                var charCode = parseInt(binary, 2);
-                message += String.fromCharCode(charCode);
-            }
-            
-            document.getElementById('decoded_message').innerText = message;
+            var decodedMessage = stegcloak.decode(encodedMessage, password);
+            document.getElementById('decoded_message').innerText = decodedMessage;
         }
     </script>
 </head>
 <body>
     <h1>Steganography Example</h1>
     
-    <img id="image" src="encoded_image.png" alt="Original Image"><br><br>
+    <button onclick="encodeMessage()">Encode</button><br><br>
     
-    <button onclick="encodeMessage()">Encode</button>
-    <img id="encoded_image" src="" alt="Encoded Image"><br><br>
+    <p id="encoded_message"></p><br>
     
     <button onclick="decodeMessage()">Decode</button><br>
+    
     <p id="decoded_message"></p>
 </body>
 </html>
