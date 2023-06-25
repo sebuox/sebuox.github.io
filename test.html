@@ -9,7 +9,8 @@
             var img = await ImageJS.Image.load('encoded_image.png');
             var pixelData = img.getPixelsArray();
 
-            // Extract the encoded message from the least significant bit of each color channel
+            // Extract the encoded message from the least significant bit of each color channel,
+            // considering the alpha channel (transparency) as well
             var decodedMessage = '';
             var currentByte = 0;
             var bitIndex = 0;
@@ -17,19 +18,21 @@
             for (var i = 0; i < pixelData.length; i++) {
                 var pixel = pixelData[i];
 
-                for (var j = 0; j < 3; j++) {
-                    var colorChannel = pixel[j] & 1;
-                    currentByte |= (colorChannel << bitIndex);
-                    bitIndex++;
+                if (pixel[3] === 255) { // Consider only fully opaque pixels
+                    for (var j = 0; j < 3; j++) {
+                        var colorChannel = pixel[j] & 1;
+                        currentByte |= (colorChannel << bitIndex);
+                        bitIndex++;
 
-                    if (bitIndex === 8) {
-                        if (currentByte === 0) {
-                            document.getElementById('decoded_message').innerText = decodedMessage;
-                            return;
+                        if (bitIndex === 8) {
+                            if (currentByte === 0) {
+                                document.getElementById('decoded_message').innerText = decodedMessage;
+                                return;
+                            }
+                            decodedMessage += String.fromCharCode(currentByte);
+                            currentByte = 0;
+                            bitIndex = 0;
                         }
-                        decodedMessage += String.fromCharCode(currentByte);
-                        currentByte = 0;
-                        bitIndex = 0;
                     }
                 }
             }
