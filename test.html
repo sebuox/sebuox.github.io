@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>Steganography Decoder</title>
+    <script src="https://cdn.jsdelivr.net/npm/stegcloak/dist/stegcloak.min.js"></script>
     <script>
-        // Function to decode a message from an image using LSB method
+        // Function to decode a message from an image using stegcloak library
         function decodeMessage() {
             var img = document.getElementById('encoded_image');
             var canvas = document.createElement('canvas');
@@ -12,28 +13,15 @@
             var ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
             var imageData = ctx.getImageData(0, 0, img.width, img.height);
-            var decodedMessage = '';
-            var byteIndex = 0;
-            var currentByte = 0;
-            var bitIndex = 7;
 
-            // Extract the message bits from the least significant bit of each color channel
+            // Extract the encoded message using stegcloak library
+            var encodedData = '';
             for (var i = 0; i < imageData.data.length; i += 4) {
-                if (byteIndex % 8 === 0 && byteIndex !== 0) {
-                    if (currentByte === 0) {
-                        break;
-                    }
-                    decodedMessage += String.fromCharCode(currentByte);
-                    currentByte = 0;
-                    bitIndex = 7;
-                }
-
                 var colorChannel = imageData.data[i] & 1;
-                currentByte |= (colorChannel << bitIndex);
-                bitIndex--;
-
-                byteIndex++;
+                encodedData += colorChannel;
             }
+
+            var decodedMessage = StegCloak.extract(encodedData);
 
             document.getElementById('decoded_message').innerText = decodedMessage;
         }
