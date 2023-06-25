@@ -1,70 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Steganography Example</title>
+  <title>Steganography Decoder</title>
 </head>
 <body>
-  <h1>Steganography Example</h1>
-  <p>Enter a secret message:</p>
-  <textarea id="secret-message" rows="4" cols="50"></textarea>
-  <button onclick="encode()">Encode</button>
-  <hr>
-  <h2>Encoded Image</h2>
-  <input type="file" id="image-input" accept="image/*" />
+  <h1>Steganography Decoder</h1>
+  <select id="image-select">
+    <option value="">Select an image</option>
+    <option value="image1.jpg">Image 1</option>
+    <option value="image2.jpg">Image 2</option>
+    <option value="image3.jpg">Image 3</option>
+    <!-- Add more options for your available images -->
+  </select>
   <button onclick="decode()">Decode</button>
   <hr>
   <h2>Decoded Message</h2>
   <p id="decoded-message"></p>
 
   <script>
-    function encode() {
-      const secretMessage = document.getElementById('secret-message').value;
-      const canvas = document.createElement('canvas');
-      canvas.width = 400;
-      canvas.height = 400;
-
-      const context = canvas.getContext('2d');
-      context.fillStyle = '#ffffff';
-      context.fillRect(0, 0, canvas.width, canvas.height);
-      context.font = '24px Arial';
-      context.fillStyle = '#000000';
-      context.fillText(secretMessage, 10, 50);
-
-      const encodedImage = document.createElement('img');
-      encodedImage.src = canvas.toDataURL();
-      document.body.appendChild(encodedImage);
-    }
-
     function decode() {
-      const imageInput = document.getElementById('image-input');
+      const imageSelect = document.getElementById('image-select');
       const decodedMessage = document.getElementById('decoded-message');
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const image = new Image();
-        image.onload = function () {
-          const canvas = document.createElement('canvas');
-          canvas.width = image.width;
-          canvas.height = image.height;
+      const selectedImage = imageSelect.value;
+      if (selectedImage === "") {
+        decodedMessage.innerText = "Please select an image.";
+        return;
+      }
 
-          const context = canvas.getContext('2d');
-          context.drawImage(image, 0, 0);
-          const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
 
-          let message = '';
-          for (let i = 0; i < imageData.data.length; i += 4) {
-            const r = imageData.data[i];
-            const g = imageData.data[i + 1];
-            const b = imageData.data[i + 2];
-            const charCode = r + g + b;
-            message += String.fromCharCode(charCode);
-          }
+        const context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-          decodedMessage.innerText = message;
-        };
-        image.src = e.target.result;
+        let message = '';
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          const r = imageData.data[i];
+          const g = imageData.data[i + 1];
+          const b = imageData.data[i + 2];
+          const charCode = r + g + b;
+          message += String.fromCharCode(charCode);
+        }
+
+        decodedMessage.innerText = message;
       };
-      reader.readAsDataURL(imageInput.files[0]);
+      image.src = selectedImage;
     }
   </script>
 </body>
