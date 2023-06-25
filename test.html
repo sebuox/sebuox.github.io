@@ -1,42 +1,32 @@
-<script>
-    function decodeMessage() {
-        var img = document.getElementById('encoded_image');
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Steganography Decoder</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsteg"></script>
+    <script>
+        function decodeMessage() {
+            var img = document.getElementById('encoded_image');
+            var decoder = new jSteg.Decoder();
 
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+            decoder.onload = function() {
+                var message = decoder.decode();
 
-        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        var pixels = imageData.data;
+                var decodedMessage = document.getElementById('decoded_message');
+                decodedMessage.innerText = message;
+            };
 
-        var message = '';
-        var currentCharCode = 0;
-        var bitIndex = 7;
+            decoder.onerror = function(error) {
+                console.error('Decoding error:', error);
+            };
 
-        for (var i = 0; i < pixels.length; i += 4) {
-            var pixel = pixels.slice(i, i + 4);
-
-            // Retrieve the LSB of the red channel and assemble the characters
-            var bit = pixel[0] & 1;
-            currentCharCode |= bit << bitIndex;
-
-            bitIndex--;
-
-            if (bitIndex < 0) {
-                // Check for null termination (ASCII code 0)
-                if (currentCharCode === 0) {
-                    break;
-                }
-
-                message += String.fromCharCode(currentCharCode);
-                currentCharCode = 0;
-                bitIndex = 7;
-            }
+            decoder.decodeImage(img);
         }
-
-        var decodedMessage = document.getElementById('decoded_message');
-        decodedMessage.innerText = message;
-    }
-</script>
+    </script>
+</head>
+<body>
+    <h1>Steganography Decoder</h1>
+    <img id="encoded_image" src="encoded_image.png" style="display: none;"><br>
+    <button onclick="decodeMessage()">Decode</button><br>
+    <p id="decoded_message"></p>
+</body>
+</html>
