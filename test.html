@@ -5,45 +5,16 @@
     <script>
         // Function to encode a message into an image using LSB algorithm
         function encodeMessage() {
-            var img = document.getElementById('image_input');
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
+            var fileInput = document.getElementById('image_input');
+            var image = fileInput.files[0];
 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-
-            var message = document.getElementById('message_input').value;
-            var encodedMessage = "";
-            var messageIndex = 0;
-
-            for (var y = 0; y < canvas.height; y++) {
-                for (var x = 0; x < canvas.width; x++) {
-                    var pixelData = ctx.getImageData(x, y, 1, 1).data;
-
-                    var r = pixelData[0];
-                    var g = pixelData[1];
-                    var b = pixelData[2];
-
-                    if (messageIndex < message.length) {
-                        var charCode = message.charCodeAt(messageIndex);
-
-                        // Store the message in the least significant bits of each RGB value
-                        r = (r & 0xFE) | ((charCode >> 7) & 0x01);
-                        g = (g & 0xFE) | ((charCode >> 6) & 0x01);
-                        b = (b & 0xFE) | ((charCode >> 5) & 0x01);
-
-                        messageIndex++;
-                    }
-
-                    ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',1)';
-                    ctx.fillRect(x, y, 1, 1);
-                }
-            }
-
-            var encodedImage = document.getElementById('encoded_image');
-            encodedImage.src = canvas.toDataURL();
-            encodedImage.style.display = 'inline';
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var img = document.getElementById('encoded_image');
+                img.src = e.target.result;
+                img.style.display = 'inline';
+            };
+            reader.readAsDataURL(image);
         }
 
         // Function to decode a message from an image using LSB algorithm
@@ -52,39 +23,38 @@
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext('2d');
 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
 
-            var message = "";
-            var charCode = 0;
-            var bitIndex = 0;
+                var message = '';
+                var currentCharCode = 0;
+                var bitIndex = 0;
 
-            for (var y = 0; y < canvas.height; y++) {
-                for (var x = 0; x < canvas.width; x++) {
-                    var pixelData = ctx.getImageData(x, y, 1, 1).data;
+                var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                var pixels = imageData.data;
 
-                    var r = pixelData[0];
-                    var g = pixelData[1];
-                    var b = pixelData[2];
+                for (var i = 0; i < pixels.length; i += 4) {
+                    var pixel = pixels.slice(i, i + 4);
 
-                    // Retrieve the LSB from each RGB value and assemble the characters
-                    charCode |= ((r & 0x01) << 7);
-                    charCode |= ((g & 0x01) << 6);
-                    charCode |= ((b & 0x01) << 5);
+                    // Retrieve the LSB of each color channel and assemble the characters
+                    currentCharCode |= ((pixel[0] & 1) << 7);
+                    currentCharCode |= ((pixel[1] & 1) << 6);
+                    currentCharCode |= ((pixel[2] & 1) << 5);
 
                     bitIndex += 3;
 
                     if (bitIndex >= 8) {
-                        message += String.fromCharCode(charCode);
-                        charCode = 0;
+                        message += String.fromCharCode(currentCharCode);
+                        currentCharCode = 0;
                         bitIndex = 0;
                     }
                 }
-            }
 
-            var decodedMessage = document.getElementById('decoded_message');
-            decodedMessage.innerText = message;
+                var decodedMessage = document.getElementById('decoded_message');
+                decodedMessage.innerText = message;
+            };
         }
     </script>
 </head>
