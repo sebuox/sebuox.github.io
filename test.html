@@ -1,56 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Steganography Decoder</title>
+    <title>Steganography Decoder</title>
+    <script>
+        // Function to decode a message from an image using LSB method
+        function decodeMessage() {
+            var img = document.getElementById('encoded_image');
+            var canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            var imageData = ctx.getImageData(0, 0, img.width, img.height);
+            var decodedMessage = '';
+
+            // Extract the least significant bit from each color channel of each pixel
+            for (var i = 0; i < imageData.data.length; i += 4) {
+                var r = imageData.data[i] & 1;
+                var g = imageData.data[i + 1] & 1;
+                var b = imageData.data[i + 2] & 1;
+                var bit = (r << 2) | (g << 1) | b;
+                decodedMessage += String.fromCharCode(bit);
+            }
+
+            document.getElementById('decoded_message').innerText = decodedMessage;
+        }
+    </script>
 </head>
 <body>
-  <h1>Steganography Decoder</h1>
-  <select id="image-select">
-    <option value="">Select an image</option>
-    <option value="14.jpg">Image 1</option>
-    <option value="image2.jpg">Image 2</option>
-    <option value="image3.jpg">Image 3</option>
-    <!-- Add more options for your available images -->
-  </select>
-  <button onclick="decode()">Decode</button>
-  <hr>
-  <h2>Decoded Message</h2>
-  <p id="decoded-message"></p>
-
-  <script>
-    function decode() {
-      const imageSelect = document.getElementById('image-select');
-      const decodedMessage = document.getElementById('decoded-message');
-
-      const selectedImage = imageSelect.value;
-      if (selectedImage === "") {
-        decodedMessage.innerText = "Please select an image.";
-        return;
-      }
-
-      const image = new Image();
-      image.onload = function () {
-        const canvas = document.createElement('canvas');
-        canvas.width = image.width;
-        canvas.height = image.height;
-
-        const context = canvas.getContext('2d');
-        context.drawImage(image, 0, 0);
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-        let message = '';
-        for (let i = 0; i < imageData.data.length; i += 4) {
-          const r = imageData.data[i];
-          const g = imageData.data[i + 1];
-          const b = imageData.data[i + 2];
-          const charCode = r + g + b;
-          message += String.fromCharCode(charCode);
-        }
-
-        decodedMessage.innerText = message;
-      };
-      image.src = selectedImage;
-    }
-  </script>
+    <h1>Steganography Decoder</h1>
+    <img id="encoded_image" src="encoded_image.png" alt="Encoded Image">
+    <button onclick="decodeMessage()">Decode</button>
+    <p id="decoded_message"></p>
 </body>
 </html>
