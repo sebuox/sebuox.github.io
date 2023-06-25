@@ -14,13 +14,23 @@
             var imageData = ctx.getImageData(0, 0, img.width, img.height);
             var decodedMessage = '';
 
-            // Extract the least significant bit from each color channel of each pixel
+            var bitIndex = 0;
+            var currentBit = 0;
+
+            // Extract the message bits from the least significant bit of each color channel
             for (var i = 0; i < imageData.data.length; i += 4) {
-                var r = imageData.data[i] & 1;
-                var g = imageData.data[i + 1] & 1;
-                var b = imageData.data[i + 2] & 1;
-                var bit = (r << 2) | (g << 1) | b;
-                decodedMessage += String.fromCharCode(bit);
+                var colorChannel = imageData.data[i] & 1;
+                currentBit |= (colorChannel << bitIndex);
+                bitIndex++;
+
+                if (bitIndex === 3) {
+                    if (currentBit === 0) {
+                        break;
+                    }
+                    decodedMessage += String.fromCharCode(currentBit);
+                    currentBit = 0;
+                    bitIndex = 0;
+                }
             }
 
             document.getElementById('decoded_message').innerText = decodedMessage;
