@@ -19,15 +19,14 @@
             // Extract the message bits from the least significant bit of each color channel
             for (var i = 0; i < imageData.data.length; i += 4) {
                 var colorChannel = imageData.data[i] & 1;
-                currentByte |= (colorChannel << (7 - byteIndex));
+                currentByte |= (colorChannel << (7 - (byteIndex % 8)));
 
-                if (byteIndex === 7) {
+                if ((byteIndex + 1) % 8 === 0) {
                     if (currentByte === 0) {
                         break;
                     }
                     decodedMessage += String.fromCharCode(currentByte);
                     currentByte = 0;
-                    byteIndex = -1;
                 }
 
                 byteIndex++;
