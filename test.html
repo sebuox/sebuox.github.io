@@ -1,45 +1,118 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Steganography Decoder</title>
-    <script src="https://unpkg.com/image-js"></script>
+    <title>Steganography Encoder & Decoder</title>
     <script>
-        // Function to decode a message from an image using LSB substitution
-        async function decodeMessage() {
-            var img = await ImageJS.Image.load('encoded_image.png');
-            var pixelData = img.getPixelsArray();
+        // Function to encode a message into an image
+        async function encodeMessage() {
+            var imageInput = document.getElementById('image_input');
+            var messageInput = document.getElementById('message_input');
 
-            var decodedMessage = '';
-            var currentByte = 0;
+            var imageFile = imageInput.files[0];
+            var message = messageInput.value;
+
+            var img = await createImageBitmap(imageFile);
+            var canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixels = imageData.data;
+
+            var messageLength = message.length;
+
+            if (messageLength > (pixels.length / 4) - 1) {
+                alert('The message is too long to be encoded in the selected image.');
+                return;
+            }
+
+            var messageIndex = 0;
+            for (var i = 0; i < pixels.length; i += 4) {
+                if (messageIndex >= messageLength) break;
+
+                var pixel = pixels.slice(i, i + 4);
+                var alpha = pixel[3];
+
+                var charCode = message.charCodeAt(messageIndex);
+                var binaryCharCode = charCode.toString(2).padStart(8, '0');
+
+                pixel[0] = (pixel[0] & 0xFE) | parseInt(binaryCharCode[0]);
+                pixel[1] = (pixel[1] & 0xFE) | parseInt(binaryCharCode[1]);
+                pixel[2] = (pixel[2] & 0xFE) | parseInt(binaryCharCode[2]);
+
+                pixels.set(pixel, i);
+                messageIndex++;
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            var encodedImage = document.getElementById('encoded_image');
+            encodedImage.src = canvas.toDataURL();
+            encodedImage.style.display = 'block';
+        }
+
+        // Function to decode a message from an image
+        async function decodeMessage() {
+            var img = document.getElementById('encoded_image');
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixels = imageData.data;
+
+            var message = '';
+            var currentCharCode = 0;
             var bitIndex = 0;
 
-            for (var i = 0; i < pixelData.length; i++) {
-                var pixel = pixelData[i];
-
-                for (var j = 0; j < 3; j++) {
-                    var colorChannel = pixel[j];
-                    currentByte |= ((colorChannel & 1) << bitIndex);
-                    bitIndex++;
-
-                    if (bitIndex === 8) {
-                        if (currentByte === 0) {
-                            document.getElementById('decoded_message').innerText = decodedMessage;
-                            return;
-                        }
-                        decodedMessage += String.fromCharCode(currentByte);
-                        currentByte = 0;
-                        bitIndex = 0;
+            for (var i = 0; i < pixels.length; i += 4) {
+                if (currentCharCode === 0) {
+                    var alpha = pixels[i + 3];
+                    if (alpha !== 255) {
+                        break;
                     }
+                }
+
+                var pixel = pixels.slice(i, i + 4);
+                var lastBitRed = pixel[0] & 1;
+                var lastBitGreen = pixel[1] & 1;
+                var lastBitBlue = pixel[2] & 1;
+
+                currentCharCode |= (lastBitRed << bitIndex);
+                currentCharCode |= (lastBitGreen << (bitIndex + 1));
+                currentCharCode |= (lastBitBlue << (bitIndex + 2));
+
+                bitIndex += 3;
+
+                if (bitIndex >= 8) {
+                    if (currentCharCode === 0) {
+                        break;
+                    }
+
+                    message += String.fromCharCode(currentCharCode);
+                    currentCharCode = 0;
+                    bitIndex = 0;
                 }
             }
 
-            document.getElementById('decoded_message').innerText = decodedMessage;
+            var decodedMessage = document.getElementById('decoded_message');
+            decodedMessage.innerText = message;
         }
     </script>
 </head>
 <body>
-    <h1>Steganography Decoder</h1>
-    <button onclick="decodeMessage()">Decode</button>
+    <h1>Steganography Encoder & Decoder</h1>
+    <input type="file" id="image_input"><br>
+    <textarea id="message_input" rows="4" cols="50" placeholder="Enter your message"></textarea><br>
+    <button onclick="encodeMessage()">Encode</button>
+    <button onclick="decodeMessage()">Decode</button><br>
+    <img id="encoded_image" style="display: none;"><br>
     <p id="decoded_message"></p>
 </body>
 </html>
