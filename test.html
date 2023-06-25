@@ -1,35 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-h1 {text-align: center;}
-p {text-align: center;}
-div {text-align: center;}
-</style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7008263050189173"
-     crossorigin="anonymous"></script>
-  <title>Dreamshare</title>
+    <title>Steganography Decoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-top: 50px;
+        }
+        
+        .container {
+            margin-top: 50px;
+        }
+        
+        #image-upload {
+            display: none;
+        }
+        
+        #decoded-message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<h1 style="font-size:4em; color:white;">&#x2608;ollin </h1>
-<p  style="font-size:4em; color:white;">Dreamshare</p>
-<button id="myButton" style="background-color: #90A4AE; font-size : 40px; width: 100%; height: 100px; height:50px;width:150px; margin-left: 46%" >&#9839;Here&#9839;</button>
+    <h1>Steganography Decoder</h1>
+    <div class="container">
+        <input type="file" id="image-upload" accept="image/png, image/jpeg">
+        <button onclick="decodeImage()">Decode Image</button>
+        <p id="decoded-message"></p>
+    </div>
 
-<script type="text/javascript">
-    document.getElementById("myButton").onclick = function () {
-        location.href = "https://dreamshare.pages.dev/index2.html";
-    };
+    <script>
+        function decodeImage() {
+            const fileInput = document.getElementById('image-upload');
+            const decodedMessage = document.getElementById('decoded-message');
 
-    </script>
-</body>
-<style>
-body {
-  background-image: url('car.jpg');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-    }
-</syle>
+            const file = fileInput.files[0];
+            const reader = new FileReader();
 
-</html>
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    let pixelIndex = 0;
+                    let decodedBits = '';
+
+                    while (true) {
+                        const pixel = ctx.getImageData(pixelIndex % img.width, Math.floor(pixelIndex / img.width), 1, 1).data;
+                        const bit = pixel[3] & 1;
+                        decodedBits += bit;
+
+                        pixelIndex++;
+
+                        if (decodedBits.length % 8 === 0 && decodedBits.slice(-8) === '00000000') {
+                            break;
+                        }
+                    }
+
+                    let decodedMessage = '';
+                    for (let i = 0; i < decodedBits.length - 8; i += 8) {
+                        const byte = decodedBits.substr(i, 8);
+                        const charCode = parseInt(byte, 2);
+                        const char = String.fromCharCode(charCode);
+                        decodedMessage += char;
+                    }
+
+                    decodedMessage = decodedMessage.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
+                    decodedMessage = decodedMessage.replace(/</g, '&lt;');
+                    decodedMessage = decodedMessage.replace(/>/g, '&gt;');
+
+                    decodedMessage = decodedMessage.replace(/\s/g, '&nbsp;');
+
+                    decodedMessage = decodedMessage.replace(/&nbsp;{2}/g, '&nbsp;&nbsp;&nbsp;');
+
+                    decodedMessage = decodedMessage.replace(/(&nbsp;)*$/g, '');
+
+                    decodedMessage = decodedMessage.replace(/&nbsp;+/g, ' ');
+
+                    decodedMessage = decodedMessage.replace(/&nbsp;<br>/g, '<br>');
+
+                    decodedMessage = decodedMessage.replace(/&nbsp;$/g, '');
+
+                    decodedMessage = decodedMessage.replace(/&nbsp;{2}<br>/g, '<br>');
+
+                    decodedMessage = decodedMessage.replace(/&nbsp;/g, ' ');
+
+                    decodedMessage = decodedMessage.replace(/<br>$/, '');
+
+                    decodedMessage = decodedMessage.replace(/<br><br>$/, '<br>');
+
+                    decodedMessage = decodedMessage.replace(/<br> {2}/g, '<br>');
+
+                    decodedMessage = decodedMessage.replace(/<br><br> {2}/
