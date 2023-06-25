@@ -15,21 +15,23 @@
             var decodedMessage = '';
             var byteIndex = 0;
             var currentByte = 0;
+            var bitIndex = 7;
 
             // Extract the message bits from the least significant bit of each color channel
             for (var i = 0; i < imageData.data.length; i += 4) {
                 var colorChannel = imageData.data[i] & 1;
-                currentByte |= (colorChannel << (7 - (byteIndex % 8)));
+                currentByte |= (colorChannel << bitIndex);
 
-                if ((byteIndex + 1) % 8 === 0) {
+                if (bitIndex === 0) {
                     if (currentByte === 0) {
                         break;
                     }
                     decodedMessage += String.fromCharCode(currentByte);
                     currentByte = 0;
+                    bitIndex = 7;
+                } else {
+                    bitIndex--;
                 }
-
-                byteIndex++;
             }
 
             document.getElementById('decoded_message').innerText = decodedMessage;
