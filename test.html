@@ -1,76 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Steganography Decoder</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        
-        h1 {
-            margin-top: 50px;
-        }
-        
-        .container {
-            margin-top: 50px;
-        }
-        
-        #decoded-message {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
+  <title>Steganography Encoder/Decoder</title>
 </head>
 <body>
-    <h1>Steganography Decoder</h1>
-    <div class="container">
-        <button onclick="decodeImage()">Decode Image</button>
-        <p id="decoded-message"></p>
-    </div>
+  <input type="file" id="image-input" accept="image/*" />
+  <textarea id="secret-message" rows="4" cols="50"></textarea>
+  <button onclick="encode()">Encode</button>
+  <button onclick="decode()">Decode</button>
+  <img id="encoded-image" />
+  <p id="decoded-message"></p>
 
-    <script>
-        function decodeImage() {
-            const imageSrc = "14.jpg"; // Replace with the path to your image
-            
-            const img = new Image();
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
+  <script>
+    function encode() {
+      const imageInput = document.getElementById('image-input');
+      const secretMessage = document.getElementById('secret-message').value;
+      const encodedImage = document.getElementById('encoded-image');
 
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const image = new Image();
+        image.onload = function () {
+          const canvas = document.createElement('canvas');
+          canvas.width = image.width;
+          canvas.height = image.height;
 
-                let pixelIndex = 0;
-                let decodedBits = '';
+          const context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0);
+          context.font = '12px Arial';
+          context.fillText(secretMessage, 10, 10);
 
-                while (true) {
-                    const pixel = ctx.getImageData(pixelIndex % img.width, Math.floor(pixelIndex / img.width), 1, 1).data;
-                    const bit = pixel[3] & 1;
-                    decodedBits += bit;
+          encodedImage.src = canvas.toDataURL();
+        };
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(imageInput.files[0]);
+    }
 
-                    pixelIndex++;
+    function decode() {
+      const encodedImage = document.getElementById('encoded-image');
+      const decodedMessage = document.getElementById('decoded-message');
 
-                    if (decodedBits.length % 8 === 0 && decodedBits.slice(-8) === '00000000') {
-                        break;
-                    }
-                }
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
 
-                let decodedMessage = '';
-                for (let i = 0; i < decodedBits.length - 8; i += 8) {
-                    const byte = decodedBits.substr(i, 8);
-                    const charCode = parseInt(byte, 2);
-                    const char = String.fromCharCode(charCode);
-                    decodedMessage += char;
-                }
+        const context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0);
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
-                decodedMessage = decodedMessage.replace(/(?:\r\n|\r|\n)/g, '<br>');
-                document.getElementById('decoded-message').innerHTML = decodedMessage;
-            };
-
-            img.src = imageSrc;
+        let message = '';
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          const r = imageData.data[i];
+          const g = imageData.data[i + 1];
+          const b = imageData.data[i + 2];
+          const charCode = r + g + b;
+          message += String.fromCharCode(charCode);
         }
-    </script>
+
+        decodedMessage.innerText = message;
+      };
+      image.src = encodedImage.src;
+    }
+  </script>
 </body>
 </html>
