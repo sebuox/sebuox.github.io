@@ -1,70 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>LSB Image Steganography</title>
+    <title>LSB Image Steganography - Decode</title>
     <script>
-        // Function to encode a message into an image using LSB algorithm
-        function encodeMessage() {
-            var fileInput = document.getElementById('image_input');
-            var image = fileInput.files[0];
-
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var img = document.getElementById('encoded_image');
-                img.src = e.target.result;
-                img.style.display = 'inline';
-            };
-            reader.readAsDataURL(image);
-        }
-
-        // Function to decode a message from an image using LSB algorithm
         function decodeMessage() {
             var img = document.getElementById('encoded_image');
             var canvas = document.createElement('canvas');
             var ctx = canvas.getContext('2d');
 
-            img.onload = function () {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
 
-                var message = '';
-                var currentCharCode = 0;
-                var bitIndex = 0;
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var pixels = imageData.data;
 
-                var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                var pixels = imageData.data;
+            var message = '';
+            var currentCharCode = 0;
+            var bitIndex = 0;
 
-                for (var i = 0; i < pixels.length; i += 4) {
-                    var pixel = pixels.slice(i, i + 4);
+            for (var i = 0; i < pixels.length; i += 4) {
+                var pixel = pixels.slice(i, i + 4);
 
-                    // Retrieve the LSB of each color channel and assemble the characters
-                    currentCharCode |= ((pixel[0] & 1) << 7);
-                    currentCharCode |= ((pixel[1] & 1) << 6);
-                    currentCharCode |= ((pixel[2] & 1) << 5);
+                // Retrieve the LSB of the red channel and assemble the characters
+                currentCharCode |= ((pixel[0] & 1) << (7 - bitIndex));
 
-                    bitIndex += 3;
+                bitIndex++;
 
-                    if (bitIndex >= 8) {
-                        message += String.fromCharCode(currentCharCode);
-                        currentCharCode = 0;
-                        bitIndex = 0;
+                if (bitIndex >= 8) {
+                    // Check for null termination (ASCII code 0)
+                    if (currentCharCode === 0) {
+                        break;
                     }
-                }
 
-                var decodedMessage = document.getElementById('decoded_message');
-                decodedMessage.innerText = message;
-            };
+                    message += String.fromCharCode(currentCharCode);
+                    currentCharCode = 0;
+                    bitIndex = 0;
+                }
+            }
+
+            var decodedMessage = document.getElementById('decoded_message');
+            decodedMessage.innerText = message;
         }
     </script>
 </head>
 <body>
-    <h1>LSB Image Steganography</h1>
-    <input type="file" id="image_input"><br>
-    <textarea id="message_input" rows="4" cols="50" placeholder="Enter your message"></textarea><br>
-    <button onclick="encodeMessage()">Encode</button>
+    <h1>LSB Image Steganography - Decode</h1>
+    <img id="encoded_image" src="encoded_image.png" style="display: none;"><br>
     <button onclick="decodeMessage()">Decode</button><br>
-    <img id="encoded_image" style="display: none;"><br>
     <p id="decoded_message"></p>
 </body>
 </html>
