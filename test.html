@@ -3,6 +3,49 @@
 <head>
     <title>LSB Image Steganography</title>
     <script>
+        // Function to encode a message into an image using LSB algorithm
+        function encodeMessage() {
+            var img = document.getElementById('image_input');
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            var message = document.getElementById('message_input').value;
+            var encodedMessage = "";
+            var messageIndex = 0;
+
+            for (var y = 0; y < canvas.height; y++) {
+                for (var x = 0; x < canvas.width; x++) {
+                    var pixelData = ctx.getImageData(x, y, 1, 1).data;
+
+                    var r = pixelData[0];
+                    var g = pixelData[1];
+                    var b = pixelData[2];
+
+                    if (messageIndex < message.length) {
+                        var charCode = message.charCodeAt(messageIndex);
+
+                        // Store the message in the least significant bits of each RGB value
+                        r = (r & 0xFE) | ((charCode >> 7) & 0x01);
+                        g = (g & 0xFE) | ((charCode >> 6) & 0x01);
+                        b = (b & 0xFE) | ((charCode >> 5) & 0x01);
+
+                        messageIndex++;
+                    }
+
+                    ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',1)';
+                    ctx.fillRect(x, y, 1, 1);
+                }
+            }
+
+            var encodedImage = document.getElementById('encoded_image');
+            encodedImage.src = canvas.toDataURL();
+            encodedImage.style.display = 'inline';
+        }
+
         // Function to decode a message from an image using LSB algorithm
         function decodeMessage() {
             var img = document.getElementById('encoded_image');
@@ -13,27 +56,30 @@
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
 
-            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var pixels = imageData.data;
-
-            var message = '';
-            var currentCharCode = 0;
+            var message = "";
+            var charCode = 0;
             var bitIndex = 0;
 
-            for (var i = 0; i < pixels.length; i += 4) {
-                var pixel = pixels.slice(i, i + 4);
+            for (var y = 0; y < canvas.height; y++) {
+                for (var x = 0; x < canvas.width; x++) {
+                    var pixelData = ctx.getImageData(x, y, 1, 1).data;
 
-                // Retrieve the LSB of each color channel and assemble the characters
-                currentCharCode |= ((pixel[0] & 1) << 7);
-                currentCharCode |= ((pixel[1] & 1) << 6);
-                currentCharCode |= ((pixel[2] & 1) << 5);
+                    var r = pixelData[0];
+                    var g = pixelData[1];
+                    var b = pixelData[2];
 
-                bitIndex += 3;
+                    // Retrieve the LSB from each RGB value and assemble the characters
+                    charCode |= ((r & 0x01) << 7);
+                    charCode |= ((g & 0x01) << 6);
+                    charCode |= ((b & 0x01) << 5);
 
-                if (bitIndex >= 8) {
-                    message += String.fromCharCode(currentCharCode);
-                    currentCharCode = 0;
-                    bitIndex = 0;
+                    bitIndex += 3;
+
+                    if (bitIndex >= 8) {
+                        message += String.fromCharCode(charCode);
+                        charCode = 0;
+                        bitIndex = 0;
+                    }
                 }
             }
 
@@ -50,12 +96,5 @@
     <button onclick="decodeMessage()">Decode</button><br>
     <img id="encoded_image" style="display: none;"><br>
     <p id="decoded_message"></p>
-
-    <script>
-        // Function to encode a message into an image using LSB algorithm
-        function encodeMessage() {
-            // Your encoding code here
-        }
-    </script>
 </body>
 </html>
