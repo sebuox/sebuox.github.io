@@ -15,21 +15,35 @@
             var decodedMessage = '';
 
             var bitIndex = 0;
-            var currentBit = 0;
+            var currentByte = 0;
+            var messageLength = 0;
 
-            // Extract the message bits from the least significant bit of each color channel
-            for (var i = 0; i < imageData.data.length; i += 4) {
+            // Extract the message length from the least significant bit of each color channel
+            for (var i = 0; i < 32; i++) {
                 var colorChannel = imageData.data[i] & 1;
-                currentBit |= (colorChannel << bitIndex);
+                messageLength |= (colorChannel << bitIndex);
                 bitIndex++;
 
-                if (bitIndex === 3) {
-                    if (currentBit === 0) {
+                if (bitIndex === 8) {
+                    bitIndex = 0;
+                }
+            }
+
+            // Extract the message bits from the least significant bit of each color channel
+            for (var j = 32; j < imageData.data.length; j += 4) {
+                var colorChannel = imageData.data[j] & 1;
+                currentByte |= (colorChannel << bitIndex);
+                bitIndex++;
+
+                if (bitIndex === 8) {
+                    decodedMessage += String.fromCharCode(currentByte);
+                    currentByte = 0;
+                    bitIndex = 0;
+
+                    // Stop extracting bits if the message length is reached
+                    if (decodedMessage.length === messageLength) {
                         break;
                     }
-                    decodedMessage += String.fromCharCode(currentBit);
-                    currentBit = 0;
-                    bitIndex = 0;
                 }
             }
 
