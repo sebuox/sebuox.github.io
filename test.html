@@ -4,8 +4,8 @@
   <title>Potražite povoljne proizvode</title>
   <style>
     body {
-      background-color: #222;
-      color: #fff;
+      background-color: #f7f7f7;
+      color: #333;
       font-family: Arial, sans-serif;
     }
 
@@ -13,13 +13,13 @@
       max-width: 600px;
       margin: 0 auto;
       padding: 40px 20px;
-      background-color: #333;
+      background-color: #fff;
       border-radius: 8px;
     }
 
     h1 {
       text-align: center;
-      color: #fff;
+      color: #333;
       font-size: 32px;
       margin-top: 0;
     }
@@ -35,15 +35,15 @@
       font-size: 16px;
       border: none;
       border-radius: 4px 0 0 4px;
-      background-color: #444;
-      color: #fff;
+      background-color: #f2f2f2;
+      color: #333;
     }
 
     .searchForm input[type="submit"] {
       padding: 10px 20px;
       font-size: 16px;
       background-color: #4CAF50;
-      color: #ffffff;
+      color: #fff;
       border: none;
       border-radius: 0 4px 4px 0;
       cursor: pointer;
@@ -60,8 +60,8 @@
     .searchLink {
       display: block;
       padding: 10px;
-      background-color: #444;
-      color: #fff;
+      background-color: #fff;
+      color: #333;
       text-decoration: none;
       border-radius: 4px;
       margin-bottom: 10px;
@@ -69,7 +69,17 @@
     }
 
     .searchLink:hover {
-      background-color: #555;
+      background-color: #f2f2f2;
+    }
+
+    .modeSwitch {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .modeSwitch label {
+      display: inline-block;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -81,6 +91,11 @@
       <input type="submit" value="Pretraži">
     </form>
     <div id="searchResults" class="searchResults"></div>
+  </div>
+
+  <div class="modeSwitch">
+    <label for="darkModeToggle">Dark Mode</label>
+    <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
   </div>
 
   <script>
@@ -111,6 +126,14 @@
       link.textContent = 'Pretraži na ' + engineName;
       link.classList.add('searchLink');
       return link;
+    }
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const container = document.querySelector('.container');
+
+      body.classList.toggle('darkMode');
+      container.classList.toggle('darkMode');
     }
   </script>
 </body>
