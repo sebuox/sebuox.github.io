@@ -2,63 +2,43 @@
 <html>
 <head>
   <title>Search for Cheap Products</title>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places"></script>
 </head>
 <body>
   <h1>Search for Cheap Products</h1>
-  <form onsubmit="searchNearbyPlaces(event)">
+  <form onsubmit="performSearch(event)">
     <input type="text" id="searchInput" placeholder="Enter product name">
     <input type="submit" value="Search">
   </form>
   <div id="searchResults"></div>
 
   <script>
-    function searchNearbyPlaces(event) {
+    function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const location = navigator.geolocation;
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery) + ' Najpovoljnija cijena online dučan';
+      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery) + ' Najpovoljnija cijena online dučan';
+      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery) + ' Najpovoljnija cijena online dučan';
 
-      if (location) {
-        location.getCurrentPosition(showNearbyPlaces);
-      } else {
-        alert("Geolocation is not supported by this browser.");
-      }
+      const searchResultsDiv = document.getElementById('searchResults');
+      searchResultsDiv.innerHTML = '';
+
+      const googleLink = createSearchLink('Google', googleSearchUrl);
+      searchResultsDiv.appendChild(googleLink);
+
+      const bingLink = createSearchLink('Bing', bingSearchUrl);
+      searchResultsDiv.appendChild(bingLink);
+
+      const duckDuckGoLink = createSearchLink('DuckDuckGo', duckDuckGoSearchUrl);
+      searchResultsDiv.appendChild(duckDuckGoLink);
     }
 
-    function showNearbyPlaces(position) {
-      const searchQuery = document.getElementById('searchInput').value;
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const radius = 5000; // 5 kilometers
-      const type = 'store'; // Adjust this based on the desired type of places
-
-      const service = new google.maps.places.PlacesService(document.createElement('div'));
-      service.nearbySearch(
-        {
-          location: { lat: latitude, lng: longitude },
-          radius: radius,
-          type: type,
-          keyword: searchQuery
-        },
-        processSearchResults
-      );
-    }
-
-    function processSearchResults(results, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        const searchResults = document.getElementById('searchResults');
-        searchResults.innerHTML = '';
-
-        for (let i = 0; i < results.length; i++) {
-          const place = results[i];
-          const name = place.name;
-          const address = place.vicinity;
-
-          const resultItem = document.createElement('p');
-          resultItem.textContent = name + ' - ' + address;
-          searchResults.appendChild(resultItem);
-        }
-      }
+    function createSearchLink(engineName, searchUrl) {
+      const link = document.createElement('a');
+      link.href = searchUrl;
+      link.target = '_blank';
+      link.textContent = 'Search on ' + engineName;
+      link.style.display = 'block';
+      return link;
     }
   </script>
 </body>
