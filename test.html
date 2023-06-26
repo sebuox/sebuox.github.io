@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Potražite povoljne proizvode</title>
+  <title>Search for Cheap Products</title>
   <style>
     body {
       background-image: url('logo.jpeg');
       background-repeat: no-repeat;
       background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .searchForm {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .searchForm input[type="text"],
+    .searchForm input[type="submit"] {
+      margin-right: 10px;
     }
 
     .searchLink {
       display: block;
       padding: 10px;
-      background-color: #7E7E7E;
+      background-color: #f2f2f2;
       margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Potražite povoljne proizvode</h1>
-  <form onsubmit="performSearch(event)">
+  <h1>Search for Cheap Products</h1>
+  <form onsubmit="performSearch(event)" class="searchForm">
     <input type="text" id="searchInput" placeholder="Enter product name">
     <input type="submit" value="Search">
   </form>
@@ -51,7 +73,7 @@
       link.href = searchUrl;
       link.target = '_blank';
       link.textContent = 'Search on ' + engineName;
-      link.style.display = 'block';
+      link.classList.add('searchLink');
       return link;
     }
   </script>
