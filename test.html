@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Nearest Shop Search</title>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAW_iiSi-fNUQuFWG0wIe3d_f3qGomX68I=places"></script>
+  <title>Lowest Price Search</title>
+  <style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome to the Nearest Shop Search Engine</h1>
+  <h1>Welcome to the Lowest Price Search Engine</h1>
   
   <form id="searchForm">
     <input type="text" id="queryInput" placeholder="Enter product name">
@@ -15,42 +20,39 @@
   <h1>Search Results</h1>
   <ul id="resultsList"></ul>
 
+  <div id="map"></div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAW_iiSi-fNUQuFWG0wIe3d_f3qGomX68I&libraries=places"></script>
+  
   <script>
     document.getElementById("searchForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
       var query = document.getElementById("queryInput").value;
 
+      // Use client location
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           var latitude = position.coords.latitude;
           var longitude = position.coords.longitude;
 
-          var searchQuery = query + " nearest shop";
+          var searchQuery = query + " Najniža cijena";
+          var searchQueryEncoded = encodeURIComponent(searchQuery);
+          var searchUrl = "https://www.google.com/search?q=" + searchQueryEncoded + "&near=" + latitude + "," + longitude;
 
-          var request = {
-            location: new google.maps.LatLng(latitude, longitude),
-            radius: '5000', // Specify the radius within which to search for places (in meters)
-            keyword: searchQuery
-          };
+          window.open(searchUrl, "_blank");
 
-          var service = new google.maps.places.PlacesService(document.createElement('div'));
-
-          service.nearbySearch(request, function(results, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-              var resultsList = document.getElementById("resultsList");
-              resultsList.innerHTML = ""; // Clear previous results
-
-              // Display the nearest shop results
-              results.forEach(function(place) {
-                var listItem = document.createElement("li");
-                listItem.textContent = place.name + " - Address: " + place.vicinity;
-                resultsList.appendChild(listItem);
-              });
-            } else {
-              console.error("Error fetching search results:", status);
-            }
+          var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: latitude, lng: longitude},
+            zoom: 14
           });
+
+          var marker = new google.maps.Marker({
+            position: {lat: latitude, lng: longitude},
+            map: map,
+            title: 'Your Location'
+          });
+
         }, function(error) {
           console.error("Error retrieving location:", error);
         });
@@ -58,6 +60,11 @@
         console.error("Geolocation is not supported by this browser.");
       }
     });
+
+    function findNearestShop() {
+      // Remaining code for finding the nearest shop
+      // ...
+    }
   </script>
 
 </body>
