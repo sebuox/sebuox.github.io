@@ -1,47 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Search for Cheap Products</title>
+  <title>Potražite povoljne proizvode</title>
   <style>
     body {
-      background-image: url('logo.jpeg');
-      background-repeat: no-repeat;
-      background-size: cover;
+      background-color: #f7f7f7;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
     }
 
     h1 {
       text-align: center;
-      color: #666666;
-      font-size: 62px;
+      color: #333333;
+      font-size: 32px;
+      margin-top: 0;
     }
 
     .searchForm {
       display: flex;
-      flex-direction: row;
       justify-content: center;
       margin-top: 20px;
     }
 
-    .searchForm input[type="text"],
+    .searchForm input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px 0 0 4px;
+    }
+
     .searchForm input[type="submit"] {
-      margin-right: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #ffffff;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    .searchForm input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .searchResults {
+      margin-top: 20px;
     }
 
     .searchLink {
       display: block;
       padding: 10px;
-      background-color: #f2f2f2;
+      background-color: #ffffff;
+      color: #333333;
+      text-decoration: none;
+      border-radius: 4px;
       margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .searchLink:hover {
+      background-color: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <h1>Search for Cheap Products</h1>
-  <form onsubmit="performSearch(event)" class="searchForm">
-    <input type="text" id="searchInput" placeholder="Enter product name">
-    <input type="submit" value="Search">
-  </form>
-  <div id="searchResults"></div>
+  <div class="container">
+    <h1>Potražite povoljne proizvode</h1>
+    <form onsubmit="performSearch(event)" class="searchForm">
+      <input type="text" id="searchInput" placeholder="Unesite naziv proizvoda">
+      <input type="submit" value="Pretraži">
+    </form>
+    <div id="searchResults" class="searchResults"></div>
+  </div>
 
   <script>
     function performSearch(event) {
@@ -68,7 +103,7 @@
       const link = document.createElement('a');
       link.href = searchUrl;
       link.target = '_blank';
-      link.textContent = 'Search on ' + engineName;
+      link.textContent = 'Pretraži na ' + engineName;
       link.classList.add('searchLink');
       return link;
     }
