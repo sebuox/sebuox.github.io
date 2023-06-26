@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Potražite povoljne proizvode</title>
-<style>
+  <title>Search for Cheap Products</title>
+  <style>
     body {
       background-image: url('logo.jpeg');
       background-repeat: no-repeat;
@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-  <h1>Potražite povoljne proizvode</h1>
+  <h1>Search for Cheap Products</h1>
   <form onsubmit="performSearch(event)">
     <input type="text" id="searchInput" placeholder="Enter product name">
     <input type="submit" value="Search">
@@ -22,9 +22,9 @@
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery) + ' Najpovoljnija cijena online dučan';
-      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery) + ' Najpovoljnija cijena online dučan';
-      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery) + ' Najpovoljnija cijena online dučan';
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
+      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
+      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
 
       const searchResultsDiv = document.getElementById('searchResults');
       searchResultsDiv.innerHTML = '';
