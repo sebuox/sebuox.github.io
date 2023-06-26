@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Search for Cheap Products</title>
+  <title>Potražite povoljne proizvode</title>
   <style>
     body {
       background-image: url('logo.jpeg');
@@ -17,7 +17,8 @@
 
     h1 {
       text-align: center;
-      font-size: 38px;
+      color: #666666;
+      font-size: 72px;
     }
 
     .searchForm {
@@ -41,7 +42,7 @@
   </style>
 </head>
 <body>
-  <h1 style="font-size: 42px;">Search for Cheap Products</h1>
+  <h1>Potražite povoljne proizvode</h1>
   <form onsubmit="performSearch(event)" class="searchForm">
     <input type="text" id="searchInput" placeholder="Enter product name">
     <input type="submit" value="Search">
@@ -52,31 +53,4 @@
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
-      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
-      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
-
-      const searchResultsDiv = document.getElementById('searchResults');
-      searchResultsDiv.innerHTML = '';
-
-      const googleLink = createSearchLink('Google', googleSearchUrl);
-      searchResultsDiv.appendChild(googleLink);
-
-      const bingLink = createSearchLink('Bing', bingSearchUrl);
-      searchResultsDiv.appendChild(bingLink);
-
-      const duckDuckGoLink = createSearchLink('DuckDuckGo', duckDuckGoSearchUrl);
-      searchResultsDiv.appendChild(duckDuckGoLink);
-    }
-
-    function createSearchLink(engineName, searchUrl) {
-      const link = document.createElement('a');
-      link.href = searchUrl;
-      link.target = '_blank';
-      link.textContent = 'Search on ' + engineName;
-      link.classList.add('searchLink');
-      return link;
-    }
-  </script>
-</body>
-</html>
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery)
