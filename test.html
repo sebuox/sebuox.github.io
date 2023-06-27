@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Proizvodi na internetu!</title>
+  <title>Potražite povoljne proizvode</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
@@ -10,6 +10,8 @@
       background-color: #f7f7f7;
       color: #333;
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
@@ -30,8 +32,7 @@
 
     .searchForm {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center;
       margin-top: 20px;
     }
 
@@ -42,9 +43,7 @@
       border-radius: 4px 0 0 4px;
       background-color: #f2f2f2;
       color: #333;
-      width: 100%;
-      max-width: 300px;
-      box-sizing: border-box;
+      flex: 1;
     }
 
     .searchForm input[type="submit"] {
@@ -55,10 +54,6 @@
       border: none;
       border-radius: 0 4px 4px 0;
       cursor: pointer;
-      width: 100%;
-      max-width: 300px;
-      box-sizing: border-box;
-      margin-top: 10px;
     }
 
     .searchResults {
@@ -80,75 +75,6 @@
       background-color: #f2f2f2;
     }
 
-    .forumBox {
-      background-color: #f2f2f2;
-      padding: 20px;
-      border-radius: 4px;
-      margin-top: 20px;
-    }
-
-    .forumTitle {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .forumContent {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .commentForm {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    .commentInput {
-      flex: 1;
-      padding: 10px;
-      font-size: 14px;
-      border: none;
-      border-radius: 4px 0 0 4px;
-      background-color: #f2f2f2;
-      color: #333;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-
-    .commentSubmit {
-      padding: 10px 20px;
-      font-size: 14px;
-      background-color: #4CAF50;
-      color: #fff;
-      border: none;
-      border-radius: 0 4px 4px 0;
-      cursor: pointer;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-
-    .forumPosts {
-      margin-top: 20px;
-    }
-
-    .forumPost {
-      background-color: #fff;
-      padding: 10px;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .forumPostContent {
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .forumPostTime {
-      font-size: 12px;
-      color: #999;
-    }
-
     .modeSwitch {
       text-align: center;
       margin-top: 20px;
@@ -165,62 +91,60 @@
       color: #fff;
     }
 
-    .darkMode h1,
-    .darkMode .forumTitle {
+    .darkMode h1 {
       color: #fff;
     }
 
-    .darkMode .searchForm input[type="text"],
-    .darkMode .commentInput {
+    .darkMode .searchForm input[type="text"] {
       background-color: #444;
       color: #fff;
     }
 
-    .darkMode .searchForm input[type="submit"],
-    .darkMode .commentSubmit {
+    .darkMode .searchForm input[type="submit"] {
       background-color: #4CAF50;
       color: #fff;
     }
 
-    .darkMode .searchLink,
-    .darkMode .forumPost {
-      background-color: #555;
+    .darkMode .searchLink {
+      background-color: #444;
       color: #fff;
     }
 
     .darkMode .searchLink:hover {
-      background-color: #666;
-    }
-
-    .darkMode .forumBox {
       background-color: #555;
     }
 
-    .darkMode .forumContent,
-    .darkMode .forumPostContent,
-    .darkMode .forumPostTime {
-      color: #fff;
-    }
+    /* Responsive Styles */
+    @media only screen and (max-width: 480px) {
+      .container {
+        padding: 20px;
+        border-radius: 0;
+      }
 
-    @media only screen and (max-width: 600px) {
       h1 {
         font-size: 24px;
       }
 
+      .searchForm {
+        flex-direction: column;
+      }
+
       .searchForm input[type="text"],
-      .searchForm input[type="submit"],
-      .commentInput,
-      .commentSubmit {
-        max-width: 100%;
+      .searchForm input[type="submit"] {
+        width: 100%;
+      }
+
+      .searchResults {
+        margin-top: 10px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Pronađite najveće popuste i najjeftinije proizvode na internetu!</h1>
+    <h1>Potražite povoljne proizvode</h1>
     <form onsubmit="performSearch(event)" class="searchForm">
-      <input type="text" id="searchInput" placeholder="Unesite naziv proizvoda">
+      <input type="text" id="searchInput" placeholder="Unesite naziv proizvoda" autocomplete="off">
       <input type="submit" value="Pretraži">
     </form>
     <div id="searchResults" class="searchResults"></div>
@@ -231,29 +155,7 @@
     <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
   </div>
 
-  <div class="container forumBox">
-    <h2 class="forumTitle">Forum</h2>
-    <p class="forumContent">Ovo je forum gdje korisnici mogu raspravljati i dijeliti informacije o jeftinim proizvodima. Slobodno postavite pitanja ili doprinesite raspravi.</p>
-    <form onsubmit="submitComment(event)" class="commentForm">
-      <input type="text" id="commentInput" placeholder="Napišite svoj komentar" class="commentInput">
-      <input type="submit" value="Objavi" class="commentSubmit">
-    </form>
-    <div id="forumPosts" class="forumPosts"></div>
-  </div>
-
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const savedComments = localStorage.getItem('forumComments');
-      const comments = savedComments ? JSON.parse(savedComments) : [];
-      const forumPostsDiv = document.getElementById('forumPosts');
-
-      comments.forEach(function(comment) {
-        const { content, time } = comment;
-        const postDiv = createPostElement(content, time);
-        forumPostsDiv.appendChild(postDiv);
-      });
-    });
-
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
@@ -283,50 +185,6 @@
       return link;
     }
 
-    function submitComment(event) {
-      event.preventDefault();
-      const commentInput = document.getElementById('commentInput');
-      const comment = commentInput.value;
-
-      if (comment.trim() === '') {
-        return;
-      }
-
-      const currentTime = new Date().toLocaleString();
-      const postDiv = createPostElement(comment, currentTime);
-      forumPostsDiv.appendChild(postDiv);
-
-      saveComment(comment, currentTime);
-
-      commentInput.value = '';
-    }
-
-    function createPostElement(content, time) {
-      const postDiv = document.createElement('div');
-      postDiv.classList.add('forumPost');
-
-      const contentParagraph = document.createElement('p');
-      contentParagraph.classList.add('forumPostContent');
-      contentParagraph.textContent = content;
-      postDiv.appendChild(contentParagraph);
-
-      const timeParagraph = document.createElement('p');
-      timeParagraph.classList.add('forumPostTime');
-      timeParagraph.textContent = 'Objavljeno ' + time;
-      postDiv.appendChild(timeParagraph);
-
-      return postDiv;
-    }
-
-    function saveComment(content, time) {
-      const savedComments = localStorage.getItem('forumComments');
-      const comments = savedComments ? JSON.parse(savedComments) : [];
-
-      comments.push({ content, time });
-
-      localStorage.setItem('forumComments', JSON.stringify(comments));
-    }
-
     function toggleDarkMode() {
       const body = document.body;
       const container = document.querySelector('.container');
@@ -335,5 +193,8 @@
       container.classList.toggle('darkMode');
     }
   </script>
+
+  <script src="https://minnit.chat/js/embed.js" defer></script>
+  <minnit-chat data-chatname="https://organizations.minnit.chat/424429685186187/Main?embed&nickname=" data-style="width:90%;height:500px;"></minnit-chat>
 </body>
 </html>
