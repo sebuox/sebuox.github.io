@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Potražite povoljne proizvode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
@@ -29,7 +30,8 @@
 
     .searchForm {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       margin-top: 20px;
     }
 
@@ -40,6 +42,9 @@
       border-radius: 4px 0 0 4px;
       background-color: #f2f2f2;
       color: #333;
+      width: 100%;
+      max-width: 300px;
+      box-sizing: border-box;
     }
 
     .searchForm input[type="submit"] {
@@ -50,10 +55,10 @@
       border: none;
       border-radius: 0 4px 4px 0;
       cursor: pointer;
-    }
-
-    .searchForm input[type="submit"]:hover {
-      background-color: #45a049;
+      width: 100%;
+      max-width: 300px;
+      box-sizing: border-box;
+      margin-top: 10px;
     }
 
     .searchResults {
@@ -95,7 +100,7 @@
 
     .commentForm {
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     .commentInput {
@@ -106,6 +111,8 @@
       border-radius: 4px 0 0 4px;
       background-color: #f2f2f2;
       color: #333;
+      margin-bottom: 10px;
+      box-sizing: border-box;
     }
 
     .commentSubmit {
@@ -116,10 +123,8 @@
       border: none;
       border-radius: 0 4px 4px 0;
       cursor: pointer;
-    }
-
-    .commentSubmit:hover {
-      background-color: #45a049;
+      margin-bottom: 10px;
+      box-sizing: border-box;
     }
 
     .forumPosts {
@@ -196,6 +201,19 @@
     .darkMode .forumPostTime {
       color: #fff;
     }
+
+    @media only screen and (max-width: 600px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .searchForm input[type="text"],
+      .searchForm input[type="submit"],
+      .commentInput,
+      .commentSubmit {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -215,30 +233,26 @@
 
   <div class="container forumBox">
     <h2 class="forumTitle">Forum</h2>
-    <p class="forumContent">Ovo je forum gdje korisnici mogu raspravljati i dijeliti informacije o jeftinim proizvodima. Slobodno postavite pitanja ili doprinesite raspravama.</p>
-
+    <p class="forumContent">Ovo je forum gdje korisnici mogu raspravljati i dijeliti informacije o jeftinim proizvodima. Slobodno postavite pitanja ili doprinesite raspravi.</p>
     <form onsubmit="submitComment(event)" class="commentForm">
-      <input type="text" id="commentInput" class="commentInput" placeholder="Napišite svoj komentar">
-      <input type="submit" class="commentSubmit" value="Pošalji">
+      <input type="text" id="commentInput" placeholder="Napišite svoj komentar" class="commentInput">
+      <input type="submit" value="Objavi" class="commentSubmit">
     </form>
-
     <div id="forumPosts" class="forumPosts"></div>
   </div>
 
   <script>
-    // Load saved comments from localStorage
-    const savedComments = localStorage.getItem('forumComments');
-    const forumPostsDiv = document.getElementById('forumPosts');
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedComments = localStorage.getItem('forumComments');
+      const comments = savedComments ? JSON.parse(savedComments) : [];
+      const forumPostsDiv = document.getElementById('forumPosts');
 
-    if (savedComments) {
-      const comments = JSON.parse(savedComments);
-
-      comments.forEach(comment => {
+      comments.forEach(function(comment) {
         const { content, time } = comment;
         const postDiv = createPostElement(content, time);
         forumPostsDiv.appendChild(postDiv);
       });
-    }
+    });
 
     function performSearch(event) {
       event.preventDefault();
