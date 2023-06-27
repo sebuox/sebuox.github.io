@@ -86,8 +86,6 @@
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 10px;
-      font-family: 'Poppins', sans-serif;
-      color: #333;
     }
 
     .forumContent {
@@ -124,6 +122,28 @@
       background-color: #45a049;
     }
 
+    .forumPosts {
+      margin-top: 20px;
+    }
+
+    .forumPost {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .forumPostContent {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .forumPostTime {
+      font-size: 12px;
+      color: #999;
+    }
+
     .modeSwitch {
       text-align: center;
       margin-top: 20px;
@@ -140,35 +160,40 @@
       color: #fff;
     }
 
-    .darkMode h1 {
+    .darkMode h1,
+    .darkMode .forumTitle {
       color: #fff;
     }
 
-    .darkMode .searchForm input[type="text"] {
+    .darkMode .searchForm input[type="text"],
+    .darkMode .commentInput {
       background-color: #444;
       color: #fff;
     }
 
-    .darkMode .searchForm input[type="submit"] {
+    .darkMode .searchForm input[type="submit"],
+    .darkMode .commentSubmit {
       background-color: #4CAF50;
       color: #fff;
     }
 
-    .darkMode .searchLink {
-      background-color: #444;
+    .darkMode .searchLink,
+    .darkMode .forumPost {
+      background-color: #555;
       color: #fff;
     }
 
     .darkMode .searchLink:hover {
-      background-color: #555;
+      background-color: #666;
     }
 
     .darkMode .forumBox {
       background-color: #555;
     }
 
-    .darkMode .forumTitle,
-    .darkMode .forumContent {
+    .darkMode .forumContent,
+    .darkMode .forumPostContent,
+    .darkMode .forumPostTime {
       color: #fff;
     }
   </style>
@@ -183,13 +208,15 @@
     <div id="searchResults" class="searchResults"></div>
 
     <div class="forumBox">
-      <h2 class="forumTitle" style="font-family: 'Poppins', sans-serif;">Forum</h2>
+      <h2 class="forumTitle">Forum</h2>
       <p class="forumContent">This is the forum section where users can discuss and share information about cheap products. Feel free to ask questions or contribute to the discussions.</p>
 
       <form onsubmit="submitComment(event)" class="commentForm">
         <input type="text" id="commentInput" class="commentInput" placeholder="Write your comment">
         <input type="submit" class="commentSubmit" value="Submit">
       </form>
+
+      <div id="forumPosts" class="forumPosts"></div>
     </div>
   </div>
 
@@ -199,6 +226,20 @@
   </div>
 
   <script>
+    // Load saved comments from localStorage
+    const savedComments = localStorage.getItem('forumComments');
+    const forumPostsDiv = document.getElementById('forumPosts');
+
+    if (savedComments) {
+      const comments = JSON.parse(savedComments);
+
+      comments.forEach(commentObj => {
+        const { content, time } = commentObj;
+        const postDiv = createPostElement(content, time);
+        forumPostsDiv.appendChild(postDiv);
+      });
+    }
+
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
@@ -237,11 +278,39 @@
         return;
       }
 
-      const commentElement = document.createElement('p');
-      commentElement.textContent = comment;
-      document.querySelector('.forumBox').appendChild(commentElement);
+      const currentTime = new Date().toLocaleString();
+      const postDiv = createPostElement(comment, currentTime);
+      forumPostsDiv.appendChild(postDiv);
+
+      saveComment(comment, currentTime);
 
       commentInput.value = '';
+    }
+
+    function createPostElement(content, time) {
+      const postDiv = document.createElement('div');
+      postDiv.classList.add('forumPost');
+
+      const contentParagraph = document.createElement('p');
+      contentParagraph.classList.add('forumPostContent');
+      contentParagraph.textContent = content;
+      postDiv.appendChild(contentParagraph);
+
+      const timeParagraph = document.createElement('p');
+      timeParagraph.classList.add('forumPostTime');
+      timeParagraph.textContent = 'Posted on ' + time;
+      postDiv.appendChild(timeParagraph);
+
+      return postDiv;
+    }
+
+    function saveComment(content, time) {
+      const savedComments = localStorage.getItem('forumComments');
+      const comments = savedComments ? JSON.parse(savedComments) : [];
+
+      comments.push({ content, time });
+
+      localStorage.setItem('forumComments', JSON.stringify(comments));
     }
 
     function toggleDarkMode() {
