@@ -206,23 +206,23 @@
       <input type="submit" value="Pretraži">
     </form>
     <div id="searchResults" class="searchResults"></div>
-
-    <div class="forumBox">
-      <h2 class="forumTitle">Forum</h2>
-      <p class="forumContent">This is the forum section where users can discuss and share information about cheap products. Feel free to ask questions or contribute to the discussions.</p>
-
-      <form onsubmit="submitComment(event)" class="commentForm">
-        <input type="text" id="commentInput" class="commentInput" placeholder="Write your comment">
-        <input type="submit" class="commentSubmit" value="Submit">
-      </form>
-
-      <div id="forumPosts" class="forumPosts"></div>
-    </div>
   </div>
 
   <div class="modeSwitch">
     <label for="darkModeToggle">Dark Mode</label>
     <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+  </div>
+
+  <div class="container forumBox">
+    <h2 class="forumTitle">Forum</h2>
+    <p class="forumContent">This is the forum section where users can discuss and share information about cheap products. Feel free to ask questions or contribute to the discussions.</p>
+
+    <form onsubmit="submitComment(event)" class="commentForm">
+      <input type="text" id="commentInput" class="commentInput" placeholder="Write your comment">
+      <input type="submit" class="commentSubmit" value="Submit">
+    </form>
+
+    <div id="forumPosts" class="forumPosts"></div>
   </div>
 
   <script>
@@ -263,12 +263,9 @@
     function createSearchLink(engineName, searchUrl) {
       const link = document.createElement('a');
       link.href = searchUrl;
+      link.target = '_blank';
       link.textContent = 'Pretraži na ' + engineName;
       link.classList.add('searchLink');
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        window.open(searchUrl, '_blank');
-      });
       return link;
     }
 
