@@ -209,17 +209,17 @@
   </div>
 
   <div class="modeSwitch">
-    <label for="darkModeToggle">Dark Mode</label>
+    <label for="darkModeToggle">Tamni način</label>
     <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
   </div>
 
   <div class="container forumBox">
     <h2 class="forumTitle">Forum</h2>
-    <p class="forumContent">This is the forum section where users can discuss and share information about cheap products. Feel free to ask questions or contribute to the discussions.</p>
+    <p class="forumContent">Ovo je forum gdje korisnici mogu raspravljati i dijeliti informacije o jeftinim proizvodima. Slobodno postavite pitanja ili doprinesite raspravama.</p>
 
     <form onsubmit="submitComment(event)" class="commentForm">
-      <input type="text" id="commentInput" class="commentInput" placeholder="Write your comment">
-      <input type="submit" class="commentSubmit" value="Submit">
+      <input type="text" id="commentInput" class="commentInput" placeholder="Napišite svoj komentar">
+      <input type="submit" class="commentSubmit" value="Pošalji">
     </form>
 
     <div id="forumPosts" class="forumPosts"></div>
@@ -233,8 +233,8 @@
     if (savedComments) {
       const comments = JSON.parse(savedComments);
 
-      comments.forEach(commentObj => {
-        const { content, time } = commentObj;
+      comments.forEach(comment => {
+        const { content, time } = comment;
         const postDiv = createPostElement(content, time);
         forumPostsDiv.appendChild(postDiv);
       });
@@ -298,7 +298,7 @@
 
       const timeParagraph = document.createElement('p');
       timeParagraph.classList.add('forumPostTime');
-      timeParagraph.textContent = 'Posted on ' + time;
+      timeParagraph.textContent = 'Objavljeno ' + time;
       postDiv.appendChild(timeParagraph);
 
       return postDiv;
