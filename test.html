@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretraga servisa u vašoj blizini</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .dark-mode {
+      background-color: #333;
+      color: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .dark-mode-toggle {
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .dark-mode-toggle.active {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .button {
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .dark-mode .button {
+      background-color: #555;
+    }
+
+    .dark-mode .button:hover {
+      background-color: #666;
+    }
+  </style>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      document.getElementById("dark-mode-toggle").classList.toggle("active");
+    }
+
+    function searchNearby(service) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          var query = service + " u blizini";
+          var url = "https://www.google.com/maps/search/" + encodeURIComponent(query) + "/@" + lat + "," + lng + ",15z";
+          window.open(url, "_blank");
+        });
+      } else {
+        alert("Geolokacija nije podržana u vašem pregledniku.");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>
+    <div id="dark-mode-toggle" class="dark-mode-toggle" onclick="toggleDarkMode()">&#9679;</div>
+    <span style="font-size: x-small;">Tamni način</span>
+  </h1>
+  <button class="button" onclick="searchNearby('električar')">Električar</button>
+  <button class="button" onclick="searchNearby('vodoinstalater')">Vodoinstalater</button>
+  <button class="button" onclick="searchNearby('krovopokrivač')">Krovopokrivač</button>
+  <button class="button" onclick="searchNearby('servis klima uređaja')">Servis klima uređaja</button>
+  <button class="button" onclick="searchNearby('servis sustava grijanja')">Servis sustava grijanja</button>
+  <button class="button" onclick="searchNearby('servis kućanskih aparata i bijele tehnike')">Servis kućanskih aparata i bijele tehnike</button>
+  <button class="button" onclick="searchNearby('servis računala i mobitela')">Servis računala i mobitela</button>
+  <button class="button" onclick="searchNearby('staklara')">Staklara</button>
+  <button class="button" onclick="searchNearby('pvc')">PVC</button>
+  <button class="button" onclick="searchNearby('servis nadzornog sustava')">Servis nadzornog sustava</button>
+  <button class="button" onclick="searchNearby('servis bazena')">Servis bazena</button>
+  <button class="button" onclick="searchNearby('servis telefona')">Servis telefona</button>
+  <button class="button" onclick="searchNearby('servis automobila')">Servis automobila</button>
+</body>
+</html>
