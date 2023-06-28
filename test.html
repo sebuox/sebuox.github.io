@@ -93,7 +93,7 @@
           var lng = position.coords.longitude;
           var query = service + " u blizini";
           var url = "https://www.google.com/maps/search/" + encodeURIComponent(query) + "/@" + lat + "," + lng + ",15z";
-          window.open(url, "_blank");
+          window.location.href = url;
         });
       } else {
         alert("Geolokacija nije podržana u vašem pregledniku.");
