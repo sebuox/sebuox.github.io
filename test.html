@@ -21,20 +21,25 @@
 
     h1 {
       margin-bottom: 20px;
-      text-align: left;
+      text-align: center;
+      font-family: "Arial", sans-serif;
+      font-weight: bold;
+      font-size: 24px;
+      color: #333;
     }
 
     .dark-mode-toggle {
       margin-right: 10px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       width: 24px;
       height: 24px;
       border-radius: 50%;
       background-color: #f5f5f5;
       color: #333;
       cursor: pointer;
+      float: left;
     }
 
     .dark-mode-toggle.active {
@@ -92,10 +97,11 @@
   </script>
 </head>
 <body>
-  <h1>
+  <div>
     <div id="dark-mode-toggle" class="dark-mode-toggle" onclick="toggleDarkMode()">&#9679;</div>
-    <span style="font-size: x-small;">Tamni način</span>
-  </h1>
+    <span style="font-size: x-small; float: left;">Tamni način</span>
+  </div>
+  <h1>Pretraga servisa u vašoj blizini</h1>
   <button class="button" onclick="searchNearby('električar')">Električar</button>
   <button class="button" onclick="searchNearby('vodoinstalater')">Vodoinstalater</button>
   <button class="button" onclick="searchNearby('krovopokrivač')">Krovopokrivač</button>
