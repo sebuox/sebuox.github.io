@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TurisHUB</title>
+  <style>
+    body {
+      font-family: 'MADE Gentle', sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background: linear-gradient(to bottom, #304a72, #4a77b8);
+      color: #fff;
+    }
+
+    .dark-mode {
+      background: linear-gradient(to bottom, #1a1a1a, #333333);
+      color: #f5f5f5;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 36px;
+      text-transform: uppercase;
+    }
+
+    .dark-mode h1 {
+      color: #f5f5f5;
+    }
+
+    .dark-mode-toggle {
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      color: #333;
+      cursor: pointer;
+      float: left;
+    }
+
+    .dark-mode-toggle.active {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .button {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: rgba(82, 176, 228, 0.8);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .button:hover {
+      background-color: rgba(82, 176, 228, 0.9);
+    }
+
+    .dark-mode .button {
+      background-color: #555;
+    }
+
+    .dark-mode .button:hover {
+      background-color: #666;
+    }
+  </style>
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      document.getElementById("dark-mode-toggle").classList.toggle("active");
+    }
+
+    function searchNearby(service) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          var query = service + " u blizini";
+          var url = "https://www.google.com/maps/search/" + encodeURIComponent(query) + "/@" + lat + "," + lng + ",15z";
+          window.open(url, "_blank");
+        });
+      } else {
+        alert("Geolokacija nije podržana u vašem pregledniku.");
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=MADE+Gentle&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div>
+    <div id="dark-mode-toggle" class="dark-mode-toggle" onclick="toggleDarkMode()">&#9679;</div>
+    <span style="font-size: x-small; float: left;">Tamni način</span>
+  </div>
+  <h1>TurisHUB</h1>
+  <button class="button" onclick="searchNearby('atrakcije i znamenitosti')">Atrakcije i znamenitosti</button>
+  <button class="button" onclick="searchNearby('kulturna iskustva')">Kulturna iskustva</button>
+  <button class="button" onclick="searchNearby('prirodna ljepota')">Prirodna ljepota</button>
+  <button class="button" onclick="searchNearby('avantura i aktivnosti na otvorenom')">Avantura i aktivnosti na otvorenom</button>
+  <button class="button" onclick="searchNearby('shopping')">Shopping</button>
+  <button class="button" onclick="searchNearby('opuštanje i odmor')">Opuštanje i odmor</button>
+  <button class="button" onclick="searchNearby('obrazovanje i učenje')">Obrazovanje i učenje</button>
+</body>
+</html>
