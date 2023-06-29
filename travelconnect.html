@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Find Nearby</title>
+  <title>Explore & Discover</title>
   <style>
     body {
       font-family: 'Copperplate', sans-serif;
@@ -95,37 +95,114 @@
   <link href="https://fonts.googleapis.com/css2?family=Copperplate&family=Papyrus&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Find Nearby</h1>
+  <h1>Explore & Discover</h1>
   <div class="menu">
-    <div class="menu-item" onclick="searchNearby('attractions')">
-      <span class="menu-item-icon">A</span>
-      <span class="menu-item-label">Attractions</span>
-    </div>
-    <div class="menu-item" onclick="searchNearby('cultural experiences')">
-      <span class="menu-item-icon">C</span>
-      <span class="menu-item-label">Cultural Experiences</span>
-    </div>
-    <div class="menu-item" onclick="searchNearby('natural beauty')">
-      <span class="menu-item-icon">N</span>
-      <span class="menu-item-label">Natural Beauty</span>
-    </div>
     <div class="menu-item" onclick="searchNearby('adventure & outdoor activities')">
       <span class="menu-item-icon">A</span>
       <span class="menu-item-label">Adventure & Outdoor Activities</span>
     </div>
-    <div class="menu-item" onclick="searchNearby('shopping')">
-      <span class="menu-item-icon">S</span>
-      <span class="menu-item-label">Shopping</span>
+    <div class="menu-item" onclick="searchNearby('architecture')">
+      <span class="menu-item-icon">A</span>
+      <span class="menu-item-label">Architecture</span>
     </div>
-    <div class="menu-item" onclick="searchNearby('relaxation & leisure')">
-      <span class="menu-item-icon">R</span>
-      <span class="menu-item-label">Relaxation & Leisure</span>
+    <div class="menu-item" onclick="searchNearby('coffee')">
+      <span class="menu-item-icon">C</span>
+      <span class="menu-item-label">Coffee</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('culture')">
+      <span class="menu-item-icon">C</span>
+      <span class="menu-item-label">Culture</span>
     </div>
     <div class="menu-item" onclick="searchNearby('education & learning')">
       <span class="menu-item-icon">E</span>
       <span class="menu-item-label">Education & Learning</span>
     </div>
+    <div class="menu-item" onclick="searchNearby('entertainment')">
+      <span class="menu-item-icon">E</span>
+      <span class="menu-item-label">Entertainment</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('gastronomy')">
+      <span class="menu-item-icon">G</span>
+      <span class="menu-item-label">Gastronomy</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('gas stations')">
+      <span class="menu-item-icon">G</span>
+      <span class="menu-item-label">Gas Stations</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('hotels')">
+      <span class="menu-item-icon">H</span>
+      <span class="menu-item-label">Hotels</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('internet cafe')">
+      <span class="menu-item-icon">I</span>
+      <span class="menu-item-label">Internet Cafe</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('landscape')">
+      <span class="menu-item-icon">L</span>
+      <span class="menu-item-label">Landscape</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('massage')">
+      <span class="menu-item-icon">M</span>
+      <span class="menu-item-label">Massage</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('natural beauty')">
+      <span class="menu-item-icon">N</span>
+      <span class="menu-item-label">Natural Beauty</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('nearby transit')">
+      <span class="menu-item-icon">N</span>
+      <span class="menu-item-label">Nearby Transit</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('parking')">
+      <span class="menu-item-icon">P</span>
+      <span class="menu-item-label">Parking</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('pizza')">
+      <span class="menu-item-icon">P</span>
+      <span class="menu-item-label">Pizza</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('relaxation & leisure')">
+      <span class="menu-item-icon">R</span>
+      <span class="menu-item-label">Relaxation & Leisure</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('restaurants')">
+      <span class="menu-item-icon">R</span>
+      <span class="menu-item-label">Restaurants</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('shopping')">
+      <span class="menu-item-icon">S</span>
+      <span class="menu-item-label">Shopping</span>
+    </div>
+    <div class="menu-item" onclick="searchNearby('wellness')">
+      <span class="menu-item-icon">W</span>
+      <span class="menu-item-label">Wellness</span>
+    </div>
   </div>
-  <div class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()">&#9788;</div>
+  <script>
+    const menuItems = Array.from(document.getElementsByClassName("menu-item"));
+    const menuLabels = Array.from(document.getElementsByClassName("menu-item-label"));
+  
+    function invertColors() {
+      menuItems.forEach(item => item.classList.toggle("invert"));
+      menuLabels.forEach(label => label.classList.toggle("invert"));
+    }
+  
+    function acceptGooglePrompt() {
+      setTimeout(function() {
+        const acceptButtons = Array.from(document.querySelectorAll("button"));
+        acceptButtons.forEach(button => {
+          const buttonText = button.textContent.toLowerCase();
+          if (buttonText.includes("accept") || buttonText.includes("agree") || buttonText.includes("yes")) {
+            button.click();
+          }
+        });
+      }, 200);
+    }
+  
+    document.addEventListener("DOMContentLoaded", function() {
+      // Automatically reject Google prompts
+      acceptGooglePrompt();
+    });
+  </script>
 </body>
 </html>
