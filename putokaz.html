@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Traženje usluge u blizini</title>
+  <script>
+    function searchNearbyServices(service) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          showNearbyServices(position, service);
+        });
+      } else {
+        alert("Geolokacija nije podržana u vašem pregledniku.");
+      }
+    }
+
+    function showNearbyServices(position, service) {
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+
+      var url = "https://www.google.com/maps/search/" + encodeURIComponent(service) + "/@" + latitude + "," + longitude + ",15z";
+      var directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(service) + "&destination_place_id=" + encodeURIComponent(service) + "&origin=" + latitude + "," + longitude;
+
+      var win = window.open(url, "_blank");
+      win.focus();
+
+      var winDirections = window.open(directionsUrl, "_blank");
+      winDirections.focus();
+    }
+  </script>
+</head>
+<body>
+  <h1>Traženje usluge u blizini</h1>
+  <p>Odaberite jednu od najtraženijih usluga:</p>
+  <ul>
+    <li><a href="#" onclick="searchNearbyServices('restoran')">Restoran</a></li>
+    <li><a href="#" onclick="searchNearbyServices('ljekarna')">Ljekarna</a></li>
+    <li><a href="#" onclick="searchNearbyServices('banka')">Banka</a></li>
+    <li><a href="#" onclick="searchNearbyServices('trgovina')">Trgovina</a></li>
+    <li><a href="#" onclick="searchNearbyServices('hotel')">Hotel</a></li>
+    <li><a href="#" onclick="searchNearbyServices('kafić')">Kafić</a></li>
+    <li><a href="#" onclick="searchNearbyServices('frizerski salon')">Frizerski salon</a></li>
+    <li><a href="#" onclick="searchNearbyServices('pizzerija')">Pizzerija</a></li>
+    <li><a href="#" onclick="searchNearbyServices('benzinska postaja')">Benzinska postaja</a></li>
+    <li><a href="#" onclick="searchNearbyServices('bolnica')">Bolnica</a></li>
+  </ul>
+</body>
+</html>
