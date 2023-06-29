@@ -6,74 +6,86 @@
   <title>TravelConnect</title>
   <style>
     body {
-      font-family: Copperplate, Papyrus, fantasy;
+      font-family: 'Copperplate', 'Papyrus', fantasy;
       margin: 0;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(to bottom, rgba(236, 239, 241, 0.8), rgba(236, 239, 241, 0.8));
-      color: #000;
-    }
-
-    .dark-mode {
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
-      color: #f5f5f5;
+      background-image: url('travel.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
     }
 
     h1 {
-      margin-bottom: 20px;
-      text-align: center;
       font-size: 36px;
+      text-align: center;
+      margin-bottom: 30px;
       text-transform: uppercase;
     }
 
-    .dark-mode-toggle {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: #f5f5f5;
-      color: #333;
-      cursor: pointer;
-      z-index: 9999;
+    .menu {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
     }
 
-    .dark-mode-toggle.active {
-      background-color: #333;
-      color: #f5f5f5;
-    }
-
-    .button {
+    .menu-item {
       margin: 10px;
-      padding: 12px 24px;
-      font-size: 18px;
+      padding: 10px 20px;
+      font-size: 24px;
       font-weight: bold;
       text-transform: uppercase;
-      color: #000;
-      background-color: transparent;
-      border: none;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.6);
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
-    .button:hover {
-      background-color: #c3e8d9;
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.3);
     }
 
-    .dark-mode .button {
-      color: #f5f5f5;
+    .dark-mode-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
     }
 
-    .dark-mode .button:hover {
-      background-color: #666;
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .dark-mode-toggle.active {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    @media only screen and (max-width: 480px) {
+      h1 {
+        font-size: 24px;
+      }
+
+      .menu-item {
+        font-size: 20px;
+        padding: 8px 16px;
+      }
     }
   </style>
   <script>
@@ -94,19 +106,20 @@
       } else {
         alert("Geolocation is not supported in your browser.");
       }
-    }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Copperplate&family=Papyrus&display=swap" rel="stylesheet">
 </head>
 <body>
   <h1>TravelConnect</h1>
-  <button class="button" onclick="searchNearby('attractions')">Attractions</button>
-  <button class="button" onclick="searchNearby('cultural experiences')">Cultural Experiences</button>
-  <button class="button" onclick="searchNearby('natural beauty')">Natural Beauty</button>
-  <button class="button" onclick="searchNearby('adventure and outdoor activities')">Adventure & Outdoor Activities</button>
-  <button class="button" onclick="searchNearby('shopping')">Shopping</button>
-  <button class="button" onclick="searchNearby('relaxation and leisure')">Relaxation & Leisure</button>
-  <button class="button" onclick="searchNearby('education and learning')">Education & Learning</button>
+  <ul class="menu">
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('attractions')">Attractions</li>
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('cultural experiences')">Cultural Experiences</li>
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('natural beauty')">Natural Beauty</li>
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('adventure and outdoor activities')">Adventure & Outdoor Activities</li>
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('shopping')">Shopping</li>
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('relaxation and leisure')">Relaxation & Leisure</li>
+    <li class="menu-item" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.6)';" onmouseout="this.style.backgroundColor='rgba(0, 0, 0, 0.6)';" onclick="searchNearby('education and learning')">Education & Learning</li>
+  </ul>
   <div class="dark-mode-toggle" onclick="toggleDarkMode()" id="dark-mode-toggle">&#9679;</div>
 </body>
 </html>
