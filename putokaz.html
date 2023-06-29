@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Traženje usluga u blizini</title>
+  <title>Xpress</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -17,7 +17,7 @@
     h1 {
       text-align: center;
       color: #fff;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 51, 102, 0.8); /* Dark sea blue */
       padding: 10px;
       border-radius: 5px;
     }
@@ -45,7 +45,7 @@
 
     .menu li {
       width: 200px;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 51, 102, 0.8); /* Dark sea blue */
       padding: 10px;
       text-align: center;
       border-radius: 5px;
@@ -78,7 +78,7 @@
           showNearbyServices(position, service);
         });
       } else {
-        alert("Geolokacija nije podržana u vašem pregledniku.");
+        alert("Geolocation is not supported by your browser.");
       }
     }
 
@@ -95,7 +95,7 @@
   </script>
 </head>
 <body>
-  <h1>Traženje usluga u blizini</h1>
+  <h1>Xpress</h1>
   <ul class="menu">
     <li>
       <h3>Restorani</h3>
