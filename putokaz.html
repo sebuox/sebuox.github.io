@@ -1,7 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Traženje usluge u blizini</title>
+  <title>Traženje usluga u blizini</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-image: url("https://dreamshare.pages.dev/travel.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    h1 {
+      text-align: center;
+      color: #000;
+      background-color: rgba(255, 255, 255, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin: 0;
+      color: #fff;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .menu li {
+      width: 200px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      margin: 10px;
+      transition: background-color 0.3s ease;
+      position: relative;
+    }
+
+    .menu li::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #fff;
+      position: absolute;
+      top: 50%;
+      left: -15px;
+      transform: translateY(-50%);
+    }
+
+    .menu li:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .menu li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
   <script>
     function searchNearbyServices(service) {
       if (navigator.geolocation) {
@@ -20,28 +94,85 @@
       var url = "https://www.google.com/maps/search/" + encodeURIComponent(service) + "/@" + latitude + "," + longitude + ",15z";
       var directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(service) + "&destination_place_id=" + encodeURIComponent(service) + "&origin=" + latitude + "," + longitude;
 
-      var win = window.open(url, "_blank");
-      win.focus();
-
-      var winDirections = window.open(directionsUrl, "_blank");
-      winDirections.focus();
+      window.open(url, "_blank");
+      window.open(directionsUrl, "_blank");
     }
   </script>
 </head>
 <body>
-  <h1>Traženje usluge u blizini</h1>
-  <p>Odaberite jednu od najtraženijih usluga:</p>
-  <ul>
-    <li><a href="#" onclick="searchNearbyServices('restoran')">Restoran</a></li>
-    <li><a href="#" onclick="searchNearbyServices('ljekarna')">Ljekarna</a></li>
-    <li><a href="#" onclick="searchNearbyServices('banka')">Banka</a></li>
-    <li><a href="#" onclick="searchNearbyServices('trgovina')">Trgovina</a></li>
-    <li><a href="#" onclick="searchNearbyServices('hotel')">Hotel</a></li>
-    <li><a href="#" onclick="searchNearbyServices('kafić')">Kafić</a></li>
-    <li><a href="#" onclick="searchNearbyServices('frizerski salon')">Frizerski salon</a></li>
-    <li><a href="#" onclick="searchNearbyServices('pizzerija')">Pizzerija</a></li>
-    <li><a href="#" onclick="searchNearbyServices('benzinska postaja')">Benzinska postaja</a></li>
-    <li><a href="#" onclick="searchNearbyServices('bolnica')">Bolnica</a></li>
+  <h1>Traženje usluga u blizini</h1>
+  <ul class="menu">
+    <li>
+      <h3 style="color: #fff;">Restorani</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('restoran')">Restoran</a></li>
+        <li><a href="#" onclick="searchNearbyServices('pizzerija')">Pizzerija</a></li>
+        <li><a href="#" onclick="searchNearbyServices('kafić')">Kafić</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Zdravstvene ustanove</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('ljekarna')">Ljekarna</a></li>
+        <li><a href="#" onclick="searchNearbyServices('bolnica')">Bolnica</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Financijske ustanove</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('banka')">Banka</a></li>
+        <li><a href="#" onclick="searchNearbyServices('bankomat')">Bankomat</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Trgovine</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('trgovina')">Trgovina</a></li>
+        <li><a href="#" onclick="searchNearbyServices('supermarket')">Supermarket</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Hoteli</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('hotel')">Hotel</a></li>
+        <li><a href="#" onclick="searchNearbyServices('motel')">Motel</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Benzijske postaje</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('benzinska postaja')">Benzinska postaja</a></li>
+        <li><a href="#" onclick="searchNearbyServices('servis za automobile')">Servis za automobile</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Frizerski saloni</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('frizerski salon')">Frizerski salon</a></li>
+        <li><a href="#" onclick="searchNearbyServices('kozmetički salon')">Kozmetički salon</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Rekreacija</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('teretana')">Teretana</a></li>
+        <li><a href="#" onclick="searchNearbyServices('bazen')">Bazen</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Kampovi</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('kamp')">Kamp</a></li>
+        <li><a href="#" onclick="searchNearbyServices('kampiranje')">Kampiranje</a></li>
+      </ul>
+    </li>
+    <li>
+      <h3 style="color: #fff;">Beach barovi</h3>
+      <ul>
+        <li><a href="#" onclick="searchNearbyServices('beach bar')">Beach bar</a></li>
+        <li><a href="#" onclick="searchNearbyServices('plažni bar')">Plažni bar</a></li>
+      </ul>
+    </li>
   </ul>
 </body>
 </html>
