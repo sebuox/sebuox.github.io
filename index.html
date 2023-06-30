@@ -64,8 +64,8 @@
       display: flex;
       align-items: center;
       padding: 10px;
-      background-color: #fff;
-      color: #333;
+      background-color: var(--search-link-bg-color);
+      color: var(--search-link-color);
       text-decoration: none;
       border-radius: 4px;
       margin-bottom: 10px;
@@ -74,7 +74,7 @@
     }
 
     .searchLink:hover {
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: var(--search-link-hover-bg-color);
       transform: scale(1.05);
     }
 
@@ -93,31 +93,35 @@
     }
 
     /* Dark Mode Styles */
-    .darkMode {
+    body.darkMode {
       background-color: #333;
       color: #fff;
     }
 
-    .darkMode h1 {
-      color: #fff;
-    }
-
-    .darkMode .searchForm input[type="text"] {
+    body.darkMode .container {
       background-color: #444;
+    }
+
+    body.darkMode h1 {
       color: #fff;
     }
 
-    .darkMode .searchForm input[type="submit"] {
+    body.darkMode .searchForm input[type="text"] {
+      background-color: #555;
+      color: #fff;
+    }
+
+    body.darkMode .searchForm input[type="submit"] {
       background-color: #4CAF50;
       color: #fff;
     }
 
-    .darkMode .searchLink {
-      background-color: #444;
+    body.darkMode .searchLink {
+      background-color: transparent;
       color: #fff;
     }
 
-    .darkMode .searchLink:hover {
+    body.darkMode .searchLink:hover {
       background-color: rgba(255, 255, 255, 0.4);
     }
 
@@ -149,7 +153,7 @@
 </head>
 <body>
   <div class="container">
-    <h1 style="font-family: 'Poppins', sans-serif;">Cool Nabava</h1>
+    <h1>Cool Nabava</h1>
     <form onsubmit="performSearch(event)" class="searchForm">
       <input type="text" id="searchInput" placeholder="Pretraži" autocomplete="off">
       <input type="submit" value="Pretraži">
@@ -214,6 +218,12 @@
       body.classList.toggle('darkMode');
       container.classList.toggle('darkMode');
     }
+  </script>
+
+  <!-- AdSense Code -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7008263050189173" crossorigin="anonymous"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </body>
 </html>
