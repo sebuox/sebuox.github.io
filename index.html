@@ -32,7 +32,8 @@
 
     .searchForm {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       margin-top: 20px;
     }
 
@@ -40,10 +41,12 @@
       padding: 10px;
       font-size: 16px;
       border: none;
-      border-radius: 4px 0 0 4px;
+      border-radius: 4px;
       background-color: #f2f2f2;
       color: #333;
-      flex: 1;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
     }
 
     .searchForm input[type="submit"] {
@@ -52,8 +55,9 @@
       background-color: #4CAF50;
       color: #fff;
       border: none;
-      border-radius: 0 4px 4px 0;
+      border-radius: 4px;
       cursor: pointer;
+      margin-top: 10px;
     }
 
     .searchResults {
@@ -125,7 +129,7 @@
     }
 
     body.darkMode .searchLink:hover {
-      background-color: #555;
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     body.darkMode .modeSwitch label {
@@ -198,12 +202,6 @@
       body.classList.toggle('darkMode');
       container.classList.toggle('darkMode');
     }
-  </script>
-
-  <!-- AdSense Code -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7008263050189173" crossorigin="anonymous"></script>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
 </body>
 </html>
