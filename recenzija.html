@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cool Nabava</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+    body {
+      background-color: #f7f7f7;
+      color: #333;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #fff;
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      margin-top: 0;
+    }
+
+    .searchForm {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .searchForm input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px 0 0 4px;
+      background-color: #f2f2f2;
+      color: #333;
+      flex: 1;
+    }
+
+    .searchForm input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    .searchResults {
+      margin-top: 20px;
+    }
+
+    .searchLink {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background-color: #fff;
+      color: #333;
+      text-decoration: none;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .searchLink:hover {
+      background-color: #f2f2f2;
+    }
+
+    .searchLink img {
+      margin-right: 10px;
+    }
+
+    .modeSwitch {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .modeSwitch label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    /* Dark Mode Styles */
+    .darkMode {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .darkMode h1 {
+      color: #fff;
+    }
+
+    .darkMode .searchForm input[type="text"] {
+      background-color: #444;
+      color: #fff;
+    }
+
+    .darkMode .searchForm input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+    }
+
+    .darkMode .searchLink {
+      background-color: #444;
+      color: #fff;
+    }
+
+    .darkMode .searchLink:hover {
+      background-color: #555;
+    }
+
+    /* Responsive Styles */
+    @media only screen and (max-width: 480px) {
+      .container {
+        padding: 20px;
+        border-radius: 0;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .searchForm {
+        flex-direction: column;
+      }
+
+      .searchForm input[type="text"],
+      .searchForm input[type="submit"] {
+        width: 100%;
+      }
+
+      .searchResults {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="font-family: 'Poppins', sans-serif;">Cool Nabava</h1>
+    <form onsubmit="performSearch(event)" class="searchForm">
+      <input type="text" id="searchInput" placeholder="Pretraži" autocomplete="off">
+      <input type="submit" value="Pretraži">
+    </form>
+    <div id="searchResults" class="searchResults"></div>
+  </div>
+
+  <div class="modeSwitch">
+    <label for="darkModeToggle">Tamni način</label>
+    <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+  </div>
+
+  <script>
+    function performSearch(event) {
+      event.preventDefault();
+      const searchQuery = document.getElementById('searchInput').value;
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const youtubeSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery + ' recenzija');
+
+      const searchResultsDiv = document.getElementById('searchResults');
+      searchResultsDiv.innerHTML = '';
+
+      const youtubeLink = createSearchLink('video zapise', youtubeSearchUrl, 'youtube.png');
+      searchResultsDiv.appendChild(youtubeLink);
+
+      const googleLink = createSearchLink('Google', googleSearchUrl, 'google.png');
+      searchResultsDiv.appendChild(googleLink);
+
+      const bingLink = createSearchLink('Bing', bingSearchUrl, 'bing.png');
+      searchResultsDiv.appendChild(bingLink);
+
+      const duckDuckGoLink = createSearchLink('DuckDuckGo', duckDuckGoSearchUrl, 'duckduckgo.png');
+      searchResultsDiv.appendChild(duckDuckGoLink);
+    }
+
+    function createSearchLink(engineName, searchUrl, iconSrc) {
+      const link = document.createElement('a');
+      link.href = searchUrl;
+      link.target = '_blank';
+      link.classList.add('searchLink');
+
+      const icon = document.createElement('img');
+      icon.src = iconSrc;
+      icon.alt = engineName;
+      icon.width = 20;
+      icon.height = 20;
+
+      const text = document.createElement('span');
+      text.textContent = engineName;
+
+      link.appendChild(icon);
+      link.appendChild(text);
+      return link;
+    }
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const container = document.querySelector('.container');
+
+      body.classList.toggle('darkMode');
+      container.classList.toggle('darkMode');
+    }
+  </script>
+</body>
+</html>
