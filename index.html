@@ -125,7 +125,7 @@
     }
 
     body.darkMode .searchLink:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: #555;
     }
 
     body.darkMode .modeSwitch label {
@@ -152,9 +152,9 @@
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno site:.hr');
-      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno site:.hr');
-      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' povoljno site:.hr');
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno akcija');
+      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno akcija');
+      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' povoljno akcija');
       const youtubeSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery + ' recenzija');
 
       const searchResultsDiv = document.getElementById('searchResults');
