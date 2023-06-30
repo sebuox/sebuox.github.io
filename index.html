@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Potražite povoljne proizvode</title>
+  <title>Cool Nabava</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
@@ -61,7 +61,8 @@
     }
 
     .searchLink {
-      display: block;
+      display: flex;
+      align-items: center;
       padding: 10px;
       background-color: #fff;
       color: #333;
@@ -73,6 +74,10 @@
 
     .searchLink:hover {
       background-color: #f2f2f2;
+    }
+
+    .searchLink img {
+      margin-right: 10px;
     }
 
     .modeSwitch {
@@ -139,16 +144,12 @@
       }
     }
   </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7008263050189173" crossorigin="anonymous"></script>
-  <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
 </head>
 <body>
   <div class="container">
-    <h1>Potražite povoljne proizvode</h1>
+    <h1 style="font-family: 'Poppins', sans-serif;">Cool Nabava</h1>
     <form onsubmit="performSearch(event)" class="searchForm">
-      <input type="text" id="searchInput" placeholder="Unesite naziv proizvoda" autocomplete="off">
+      <input type="text" id="searchInput" placeholder="Pretraži" autocomplete="off">
       <input type="submit" value="Pretraži">
     </form>
     <div id="searchResults" class="searchResults"></div>
@@ -163,29 +164,44 @@
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
-      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
-      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery) + ' online dučan najpovoljnija cijena';
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const youtubeSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery + ' recenzija');
 
       const searchResultsDiv = document.getElementById('searchResults');
       searchResultsDiv.innerHTML = '';
 
-      const googleLink = createSearchLink('Google', googleSearchUrl);
+      const youtubeLink = createSearchLink('Video zapisi', youtubeSearchUrl, 'https://dreamshare.pages.dev/youtube.png');
+      searchResultsDiv.appendChild(youtubeLink);
+
+      const googleLink = createSearchLink('Google', googleSearchUrl, 'https://dreamshare.pages.dev/google.png');
       searchResultsDiv.appendChild(googleLink);
 
-      const bingLink = createSearchLink('Bing', bingSearchUrl);
+      const bingLink = createSearchLink('Bing', bingSearchUrl, 'https://dreamshare.pages.dev/bing.png');
       searchResultsDiv.appendChild(bingLink);
 
-      const duckDuckGoLink = createSearchLink('DuckDuckGo', duckDuckGoSearchUrl);
+      const duckDuckGoLink = createSearchLink('DuckDuckGo', duckDuckGoSearchUrl, 'https://dreamshare.pages.dev/DuckDuckGo.png');
       searchResultsDiv.appendChild(duckDuckGoLink);
     }
 
-    function createSearchLink(engineName, searchUrl) {
+    function createSearchLink(engineName, searchUrl, iconSrc) {
       const link = document.createElement('a');
       link.href = searchUrl;
       link.target = '_blank';
-      link.textContent = 'Pretraži na ' + engineName;
       link.classList.add('searchLink');
+
+      const icon = document.createElement('img');
+      icon.src = iconSrc;
+      icon.alt = engineName;
+      icon.width = 20;
+      icon.height = 20;
+
+      const text = document.createElement('span');
+      text.textContent = engineName;
+
+      link.appendChild(icon);
+      link.appendChild(text);
       return link;
     }
 
