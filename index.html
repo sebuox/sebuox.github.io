@@ -67,7 +67,7 @@
       background-color: var(--search-link-bg-color);
       color: var(--search-link-color);
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 8px;
       margin-bottom: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: background-color 0.3s, transform 0.3s;
@@ -80,6 +80,9 @@
 
     .searchLink img {
       margin-right: 10px;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
     }
 
     .modeSwitch {
@@ -122,32 +125,11 @@
     }
 
     body.darkMode .searchLink:hover {
-      background-color: rgba(255, 255, 255, 0.4);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
-    /* Responsive Styles */
-    @media only screen and (max-width: 480px) {
-      .container {
-        padding: 20px;
-        border-radius: 0;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .searchForm {
-        flex-direction: column;
-      }
-
-      .searchForm input[type="text"],
-      .searchForm input[type="submit"] {
-        width: 100%;
-      }
-
-      .searchResults {
-        margin-top: 10px;
-      }
+    body.darkMode .modeSwitch label {
+      color: #fff;
     }
   </style>
 </head>
@@ -170,9 +152,9 @@
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' site:.hr');
-      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' site:.hr');
-      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' site:.hr');
+      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno site:.hr');
+      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno site:.hr');
+      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' povoljno site:.hr');
       const youtubeSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery + ' recenzija');
 
       const searchResultsDiv = document.getElementById('searchResults');
@@ -200,8 +182,6 @@
       const icon = document.createElement('img');
       icon.src = iconSrc;
       icon.alt = engineName;
-      icon.width = 20;
-      icon.height = 20;
 
       const text = document.createElement('span');
       text.textContent = engineName;
