@@ -18,7 +18,7 @@ function showPosition(position) {
   // Use the retrieved API URL to fetch data from Yelp
   fetch(yelpAPIUrl, {
     headers: {
-      "Authorization": "Bearer YOUR_YELP_API_KEY" // Replace with your Yelp API key
+      "Authorization": "Bearer NQsM2CYKBClp6Otfe-7MeOTLAiR4rY-d3XfYNiDFnI7GqCAzAqTgu-CJCh-ahP7CSka-xPzwJqMovSsx-nY-NLgJraeqZjRnDWsWBmhVMNXtGbGDqFXZiRPFjUOgZHYx" // Replace with your Yelp API key
     }
   })
   .then(response => response.json())
