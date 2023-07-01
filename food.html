@@ -1,71 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ServiceSpot</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* Your CSS styles here */
-  </style>
+  <title>Food Search and Delivery</title>
+  <script src="script.js"></script>
 </head>
 <body>
-  <h1>ServiceSpot</h1>
-  <div class="menu">
-    <button onclick="searchNearbyServices('restaurants')">Restaurants</button>
-    <button onclick="searchNearbyServices('healthcare')">Healthcare</button>
-    <!-- Add more buttons for other categories -->
+  <h1>Food Search and Delivery</h1>
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Enter a location">
+    <button onclick="searchRestaurants()">Search</button>
   </div>
-  <ul id="results"></ul>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    // Your JavaScript code here
-
-    function searchNearbyServices(category) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          fetchYelpData(position, category);
-        });
-      } else {
-        alert("Geolocation is not supported by your browser.");
-      }
-    }
-
-    function fetchYelpData(position, category) {
-      var latitude = position.coords.latitude;
-      var longitude = position.coords.longitude;
-      var apiKey = "NQsM2CYKBClp6Otfe-7MeOTLAiR4rY-d3XfYNiDFnI7GqCAzAqTgu-CJCh-ahP7CSka-xPzwJqMovSsx-nY-NLgJraeqZjRnDWsWBmhVMNXtGbGDqFXZiRPFjUOgZHYx"; // Replace with your Yelp API key
-
-      var url = "https://api.yelp.com/v3/businesses/search?term=" + encodeURIComponent(category) + "&latitude=" + latitude + "&longitude=" + longitude + "&limit=5";
-
-      $.ajax({
-        url: url,
-        headers: {
-          Authorization: "Bearer " + apiKey
-        },
-        method: "GET",
-        success: function(response) {
-          showNearbyServices(response.businesses);
-        },
-        error: function(error) {
-          console.log("Error:", error);
-        }
-      });
-    }
-
-    function showNearbyServices(businesses) {
-      var resultHTML = "";
-      var ulElement = document.getElementById("results");
-
-      businesses.forEach(function(business) {
-        var liElement = document.createElement("li");
-        var aElement = document.createElement("a");
-        aElement.href = business.url;
-        aElement.target = "_blank";
-        aElement.textContent = business.name;
-        liElement.appendChild(aElement);
-        ulElement.appendChild(liElement);
-      });
-    }
-  </script>
+  <div id="results-container"></div>
 </body>
 </html>
