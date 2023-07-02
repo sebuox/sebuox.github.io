@@ -1,121 +1,163 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Find Places Near Me</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>City Compass</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-image: url('searchapp.jpg');
-      background-repeat: no-repeat;
-      background-size: cover;
     }
 
-    body.dark-mode {
-      background-color: rgba(0, 0, 0, 0.8);
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url(searchapp.jpg) center center fixed;
+      background-size: cover;
     }
 
     h1 {
       text-align: center;
-      margin-top: 20px;
       color: #fff;
+      font-size: 2.5rem;
+      margin-top: 2rem;
     }
 
     #search-container {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      margin-bottom: 20px;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 10px;
-      border-radius: 5px;
+      margin-top: 2rem;
     }
 
     #search-input {
-      width: 80%;
-      padding: 10px;
-      font-size: 16px;
+      padding: 0.5rem;
+      font-size: 1.2rem;
       border: none;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      background-color: #333;
-      color: #f0f0f0;
+      border-radius: 4px;
+      outline: none;
+      width: 300px;
     }
 
     #search-button {
-      padding: 10px 20px;
-      background-color: #007bff;
+      margin-left: 1rem;
+      padding: 0.5rem 1.5rem;
+      background-color: #4285f4;
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 4px;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #search-button:hover {
+      background-color: #3367d6;
     }
 
     #category-buttons {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 20px;
+      align-items: center;
+      margin-top: 2rem;
     }
 
-    #category-buttons button {
-      margin: 5px;
-      padding: 10px 20px;
-      background-color: rgba(255, 255, 255, 0.5);
+    .category-button {
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: transparent;
       color: #fff;
-      border: 1px solid #fff;
-      border-radius: 5px;
+      border: none;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s;
+      opacity: 0.8;
     }
 
-    #category-buttons button:hover {
-      background-color: #fff;
-      color: #007bff;
+    .category-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
 
     #map {
-      height: 300px;
-      width: 100%;
-      margin-bottom: 20px;
+      height: 400px;
+      margin-top: 2rem;
     }
 
     #search-results {
-      width: 80%;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 10px;
-      border-radius: 5px;
+      margin-top: 2rem;
     }
 
-    #search-results ul {
+    ul {
       list-style-type: none;
-      padding: 0;
     }
 
-    #search-results li {
-      margin-bottom: 10px;
+    li {
+      padding: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
       cursor: pointer;
-      background-color: #111;
-      color: #f0f0f0;
-      padding: 10px;
-      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    li:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    #dark-mode-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #dark-mode-button:hover {
+      background-color: rgba(0, 0, 0, 1);
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #fff;
     }
   </style>
+</head>
+<body>
+  <h1>City Compass</h1>
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Search...">
+    <button id="search-button">Search</button>
+  </div>
+  <div id="category-buttons">
+    <button class="category-button" id="restaurants-btn">Restaurants</button>
+    <button class="category-button" id="notebooks-btn">Notebooks</button>
+    <button class="category-button" id="recommendations-btn">Recommendations</button>
+    <button class="category-button" id="museum-btn">Museum</button>
+    <button class="category-button" id="public-transport-btn">Public Transport</button>
+    <button class="category-button" id="pharmacies-btn">Pharmacies</button>
+    <button class="category-button" id="atms-btn">ATMs</button>
+    <button id="my-location-btn">Show My Location</button>
+  </div>
+  <div id="map"></div>
+  <div id="search-results">
+    <ul></ul>
+  </div>
+  <button id="dark-mode-button">Toggle Dark Mode</button>
+
   <script>
     const API_KEY = 'AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A';
 
     let markers = []; // Array to store the markers
     let map;
     let directionsRenderer;
+    let currentQuery = '';
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 0, lng: 0},
+        center: { lat: 0, lng: 0 },
         zoom: 14
       });
 
@@ -126,26 +168,28 @@
       const service = new google.maps.places.PlacesService(map);
 
       function performSearch(query) {
-        markers.forEach(function(marker) {
+        markers.forEach(function (marker) {
           marker.setMap(null);
         });
         markers = [];
 
         document.getElementById('search-results').innerHTML = '';
 
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          map.setCenter({lat: latitude, lng: longitude});
+          map.setCenter({ lat: latitude, lng: longitude });
 
           const request = {
-            location: {lat: latitude, lng: longitude},
+            location: { lat: latitude, lng: longitude },
             radius: '500',
             query: query
           };
 
-          service.textSearch(request, function(results, status) {
+          currentQuery = query;
+
+          service.textSearch(request, function (results, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
               for (let i = 0; i < results.length; i++) {
                 const place = results[i];
@@ -157,7 +201,7 @@
 
                 const listItem = document.createElement('li');
                 listItem.textContent = place.name;
-                listItem.addEventListener('click', function() {
+                listItem.addEventListener('click', function () {
                   showRoute(place.geometry.location);
                 });
                 document.getElementById('search-results').appendChild(listItem);
@@ -168,21 +212,21 @@
       }
 
       function showRoute(destination) {
-        directionsRenderer.setDirections({routes: []});
+        directionsRenderer.setDirections({ routes: [] });
 
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
           const directionsService = new google.maps.DirectionsService();
 
           const request = {
-            origin: {lat: latitude, lng: longitude},
+            origin: { lat: latitude, lng: longitude },
             destination: destination,
             travelMode: google.maps.TravelMode.DRIVING
           };
 
-          directionsService.route(request, function(result, status) {
+          directionsService.route(request, function (result, status) {
             if (status === google.maps.DirectionsStatus.OK) {
               directionsRenderer.setDirections(result);
             }
@@ -192,60 +236,67 @@
 
       function showMyLocation() {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
+          navigator.geolocation.getCurrentPosition(function (position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
-            map.setCenter({lat: latitude, lng: longitude});
+            map.setCenter({ lat: latitude, lng: longitude });
 
             const marker = new google.maps.Marker({
-              position: {lat: latitude, lng: longitude},
-              map: map,
-              title: 'My Location'
+              position: { lat: latitude, lng: longitude },
+              map: map
             });
-          });
-        } else {
-          alert('Geolocation is not supported by this browser.');
-        }
-      }
 
-      function searchOnEnter(event) {
-        if (event.key === 'Enter') {
-          const searchQuery = document.getElementById('search-input').value;
-          performSearch(searchQuery);
+            markers.push(marker);
+          });
         }
       }
 
       function searchOnClick() {
-        const searchQuery = document.getElementById('search-input').value;
-        performSearch(searchQuery);
+        const query = document.getElementById('search-input').value;
+        performSearch(query);
       }
 
-      document.getElementById('restaurants-btn').addEventListener('click', function() {
+      function searchOnEnter(event) {
+        if (event.key === 'Enter') {
+          const query = document.getElementById('search-input').value;
+          performSearch(query);
+        }
+      }
+
+      function clearSearchResults() {
+        document.getElementById('search-results').innerHTML = '';
+      }
+
+      function clearRoute() {
+        directionsRenderer.setDirections({ routes: [] });
+      }
+
+      document.getElementById('restaurants-btn').addEventListener('click', function () {
         performSearch('restaurants');
       });
 
-      document.getElementById('notebooks-btn').addEventListener('click', function() {
+      document.getElementById('notebooks-btn').addEventListener('click', function () {
         performSearch('notebooks');
       });
 
-      document.getElementById('recommendations-btn').addEventListener('click', function() {
+      document.getElementById('recommendations-btn').addEventListener('click', function () {
         performSearch('recommendations');
       });
 
-      document.getElementById('museum-btn').addEventListener('click', function() {
+      document.getElementById('museum-btn').addEventListener('click', function () {
         performSearch('museum');
       });
 
-      document.getElementById('public-transport-btn').addEventListener('click', function() {
+      document.getElementById('public-transport-btn').addEventListener('click', function () {
         performSearch('public transport');
       });
 
-      document.getElementById('pharmacies-btn').addEventListener('click', function() {
+      document.getElementById('pharmacies-btn').addEventListener('click', function () {
         performSearch('pharmacies');
       });
 
-      document.getElementById('atms-btn').addEventListener('click', function() {
+      document.getElementById('atms-btn').addEventListener('click', function () {
         performSearch('ATMs');
       });
 
@@ -254,35 +305,48 @@
       document.getElementById('search-input').addEventListener('keypress', searchOnEnter);
 
       document.getElementById('search-button').addEventListener('click', searchOnClick);
+
+      document.getElementById('search-results').addEventListener('click', function (event) {
+        const target = event.target;
+        if (target.tagName === 'LI') {
+          const listItemText = target.textContent;
+          const resultIndex = target.getAttribute('data-index');
+          const searchResults = document.querySelectorAll('#search-results li');
+
+          searchResults.forEach(function (result, index) {
+            if (index !== parseInt(resultIndex)) {
+              result.style.backgroundColor = '';
+            }
+          });
+
+          target.style.backgroundColor = '#ccc';
+
+          const places = markers.filter(function (marker) {
+            return marker.title === listItemText;
+          });
+
+          if (places.length > 0) {
+            const place = places[0];
+            showRoute(place.position);
+          }
+        }
+      });
+
+      document.getElementById('search-input').addEventListener('input', function () {
+        if (this.value === '') {
+          clearSearchResults();
+          clearRoute();
+        }
+      });
     }
 
     function toggleDarkMode() {
       const body = document.querySelector('body');
       body.classList.toggle('dark-mode');
     }
+
+    document.getElementById('dark-mode-button').addEventListener('click', toggleDarkMode);
   </script>
-</head>
-<body class="dark-mode">
-  <h1>Find Places Near Me</h1>
-  <div id="search-container">
-    <input type="text" id="search-input" placeholder="Search...">
-    <button id="search-button">Search</button>
-  </div>
-  <div id="category-buttons">
-    <button id="restaurants-btn">Restaurants</button>
-    <button id="notebooks-btn">Notebooks</button>
-    <button id="recommendations-btn">Recommendations</button>
-    <button id="museum-btn">Museum</button>
-    <button id="public-transport-btn">Public Transport</button>
-    <button id="pharmacies-btn">Pharmacies</button>
-    <button id="atms-btn">ATMs</button>
-    <button id="my-location-btn">Show My Location</button>
-  </div>
-  <div id="map"></div>
-  <div id="search-results">
-    <ul></ul>
-  </div>
-  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
