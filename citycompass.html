@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Find Places Near Me</title>
+  <title>City Compass</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -14,6 +14,10 @@
       background-image: url('searchapp.jpg');
       background-repeat: no-repeat;
       background-size: cover;
+    }
+
+    body.dark-mode {
+      background-color: rgba(0, 0, 0, 0.8);
     }
 
     h1 {
@@ -45,11 +49,13 @@
       border: none;
       border-radius: 5px;
       margin-bottom: 10px;
+      background-color: #333;
+      color: #f0f0f0;
     }
 
     #search-button {
       padding: 10px 20px;
-      background-color: #4CAF50;
+      background-color: #007bff;
       color: #fff;
       border: none;
       border-radius: 5px;
@@ -76,7 +82,7 @@
 
     #category-buttons button:hover {
       background-color: #fff;
-      color: #4CAF50;
+      color: #007bff;
     }
 
     #search-results {
@@ -94,55 +100,14 @@
     #search-results li {
       margin-bottom: 10px;
       cursor: pointer;
-      background-color: #f9f9f9;
+      background-color: #111;
+      color: #f0f0f0;
       padding: 10px;
       border-radius: 5px;
     }
-
-    /* Dark mode styles */
-    body.dark-mode {
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    body.dark-mode h1 {
-      color: #fff;
-    }
-
-    body.dark-mode #search-container {
-      background-color: rgba(255, 255, 255, 0.4);
-    }
-
-    body.dark-mode #search-container #search-input {
-      background-color: #333;
-      color: #f0f0f0;
-    }
-
-    body.dark-mode #search-container #search-button {
-      background-color: #007bff;
-    }
-
-    body.dark-mode #category-buttons button {
-      background-color: transparent;
-      color: #fff;
-      border-color: #fff;
-    }
-
-    body.dark-mode #category-buttons button:hover {
-      background-color: #fff;
-      color: #007bff;
-    }
-
-    body.dark-mode #search-results {
-      background-color: rgba(255, 255, 255, 0.4);
-    }
-
-    body.dark-mode #search-results li {
-      background-color: #111;
-      color: #f0f0f0;
-    }
   </style>
   <script>
-    const API_KEY = 'YOUR_API_KEY';
+    const API_KEY = 'AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A';
 
     let markers = []; // Array to store the markers
     let map;
@@ -297,8 +262,8 @@
     }
   </script>
 </head>
-<body>
-  <h1>Find Places Near Me</h1>
+<body class="dark-mode">
+  <h1>City Compass</h1>
   <div id="search-container">
     <input type="text" id="search-input" placeholder="Search...">
     <button id="search-button">Search</button>
