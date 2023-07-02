@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
@@ -66,11 +66,17 @@
     #category-buttons button {
       margin: 5px;
       padding: 10px 20px;
-      background-color: #4CAF50;
+      background-color: transparent;
       color: #fff;
-      border: none;
+      border: 1px solid #fff;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    #category-buttons button:hover {
+      background-color: #fff;
+      color: #4CAF50;
     }
 
     #search-results {
@@ -116,7 +122,14 @@
     }
 
     body.dark-mode #category-buttons button {
-      background-color: #007bff;
+      background-color: transparent;
+      color: #fff;
+      border-color: #fff;
+    }
+
+    body.dark-mode #category-buttons button:hover {
+      background-color: #fff;
+      color: #007bff;
     }
 
     body.dark-mode #search-results {
@@ -124,21 +137,18 @@
     }
 
     body.dark-mode #search-results li {
-      background-color: #f0f0f0;
-      color: #333;
+      background-color: #111;
+      color: #f0f0f0;
     }
   </style>
   <script>
-    // Replace 'YOUR_API_KEY' with your actual API key
-    const API_KEY = 'AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A';
+    const API_KEY = 'YOUR_API_KEY';
 
     let markers = []; // Array to store the markers
     let map;
     let directionsRenderer;
 
-    // Function to initialize the map
     function initMap() {
-      // Create map centered at a default location
       map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 0, lng: 0},
         zoom: 14
@@ -148,39 +158,30 @@
         map: map
       });
 
-      // Create a PlacesService object to access the Places API
       const service = new google.maps.places.PlacesService(map);
 
-      // Function to perform a nearby search based on the selected category
       function performSearch(query) {
-        // Remove existing markers from the map
         markers.forEach(function(marker) {
           marker.setMap(null);
         });
         markers = [];
 
-        // Clear previous results
         document.getElementById('search-results').innerHTML = '';
 
-        // Get user's current location
         navigator.geolocation.getCurrentPosition(function(position) {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          // Update map center to user's location
           map.setCenter({lat: latitude, lng: longitude});
 
-          // Define the request parameters
           const request = {
             location: {lat: latitude, lng: longitude},
             radius: '500',
             query: query
           };
 
-          // Perform a text search
           service.textSearch(request, function(results, status) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
-              // Loop through each result and add a marker on the map
               for (let i = 0; i < results.length; i++) {
                 const place = results[i];
                 const marker = new google.maps.Marker({
@@ -189,7 +190,6 @@
                 });
                 markers.push(marker);
 
-                // Add the place details to the results list
                 const listItem = document.createElement('li');
                 listItem.textContent = place.name;
                 listItem.addEventListener('click', function() {
@@ -202,12 +202,9 @@
         });
       }
 
-      // Function to show the route from current location to the selected destination
       function showRoute(destination) {
-        // Remove existing route from the map
         directionsRenderer.setDirections({routes: []});
 
-        // Get user's current location
         navigator.geolocation.getCurrentPosition(function(position) {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
@@ -228,14 +225,12 @@
         });
       }
 
-      // Function to show user's current location
       function showMyLocation() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
-            // Update map center to user's location
             map.setCenter({lat: latitude, lng: longitude});
 
             const marker = new google.maps.Marker({
@@ -249,7 +244,6 @@
         }
       }
 
-      // Function to perform search on enter key press
       function searchOnEnter(event) {
         if (event.key === 'Enter') {
           const searchQuery = document.getElementById('search-input').value;
@@ -257,13 +251,11 @@
         }
       }
 
-      // Function to perform search on button click
       function searchOnClick() {
         const searchQuery = document.getElementById('search-input').value;
         performSearch(searchQuery);
       }
 
-      // Add event listeners to the category buttons
       document.getElementById('restaurants-btn').addEventListener('click', function() {
         performSearch('restaurants');
       });
@@ -294,14 +286,11 @@
 
       document.getElementById('my-location-btn').addEventListener('click', showMyLocation);
 
-      // Add event listener to search input box
       document.getElementById('search-input').addEventListener('keypress', searchOnEnter);
 
-      // Add event listener to search button
       document.getElementById('search-button').addEventListener('click', searchOnClick);
     }
 
-    // Function to toggle dark mode
     function toggleDarkMode() {
       const body = document.querySelector('body');
       body.classList.toggle('dark-mode');
