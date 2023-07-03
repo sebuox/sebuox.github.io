@@ -118,8 +118,8 @@
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 0, lng: 0},
-        zoom: 14
+        center: {lat: 45.815, lng: 15.981},
+        zoom: 13
       });
 
       directionsRenderer = new google.maps.DirectionsRenderer();
@@ -244,10 +244,9 @@
         performSearch('bankomati');
       });
 
-      document.getElementById('my-location-btn').addEventListener('click', showMyLocation);
-
-      document.getElementById('search-input').addEventListener('keypress', searchOnEnter);
+      document.getElementById('search-input').addEventListener('keyup', searchOnEnter);
       document.getElementById('search-button').addEventListener('click', searchOnClick);
+      document.getElementById('my-location-btn').addEventListener('click', showMyLocation);
     }
   </script>
 </head>
