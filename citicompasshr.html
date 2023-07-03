@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>City Compass</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: url('searchapp.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      color: #fff;
+    }
+
+    #map {
+      height: 300px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    #search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #search-input {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      background-color: #333;
+      color: #f0f0f0;
+    }
+
+    #search-button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #category-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #category-buttons button {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    #category-buttons button:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #007bff;
+    }
+
+    #search-results {
+      width: 80%;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #search-results ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #search-results li {
+      margin-bottom: 10px;
+      cursor: pointer;
+      background-color: #111;
+      color: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #search-results li:hover {
+      background-color: #333;
+    }
+  </style>
+  <script>
+    const API_KEY = 'AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A';
+
+    let markers = []; // Polje za spremanje markera
+    let map;
+    let directionsRenderer;
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 0, lng: 0},
+        zoom: 14
+      });
+
+      directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
+
+      const service = new google.maps.places.PlacesService(map);
+
+      function performSearch(query) {
+        markers.forEach(function(marker) {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        document.getElementById('search-results').innerHTML = '';
+
+        const request = {
+          query: query
+        };
+
+        service.textSearch(request, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (let i = 0; i < results.length; i++) {
+              const place = results[i];
+              const marker = new google.maps.Marker({
+                position: place.geometry.location,
+                map: map
+              });
+              markers.push(marker);
+
+              const listItem = document.createElement('li');
+              listItem.textContent = place.name;
+              listItem.addEventListener('click', function() {
+                showRoute(place.geometry.location);
+              });
+              document.getElementById('search-results').appendChild(listItem);
+            }
+          } else {
+            alert('Nema rezultata za upit.');
+          }
+        });
+      }
+
+      function showRoute(destination) {
+        directionsRenderer.setDirections({routes: []});
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          const directionsService = new google.maps.DirectionsService();
+
+          const request = {
+            origin: {lat: latitude, lng: longitude},
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING
+          };
+
+          directionsService.route(request, function(result, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+              directionsRenderer.setDirections(result);
+            }
+          });
+        });
+      }
+
+      function showMyLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            map.setCenter({lat: latitude, lng: longitude});
+
+            const marker = new google.maps.Marker({
+              position: {lat: latitude, lng: longitude},
+              map: map,
+              title: 'Moja lokacija'
+            });
+          });
+        } else {
+          alert('Geolokacija nije podržana u ovom pregledniku.');
+        }
+      }
+
+      function searchOnEnter(event) {
+        if (event.key === 'Enter') {
+          const searchQuery = document.getElementById('search-input').value;
+          performSearch(searchQuery);
+        }
+      }
+
+      function searchOnClick() {
+        const searchQuery = document.getElementById('search-input').value;
+        performSearch(searchQuery);
+      }
+
+      document.getElementById('restaurants-btn').addEventListener('click', function() {
+        performSearch('restorani');
+      });
+
+      document.getElementById('notebooks-btn').addEventListener('click', function() {
+        performSearch('bilježnice');
+      });
+
+      document.getElementById('recommendations-btn').addEventListener('click', function() {
+        performSearch('preporuke');
+      });
+
+      document.getElementById('museum-btn').addEventListener('click', function() {
+        performSearch('muzej');
+      });
+
+      document.getElementById('public-transport-btn').addEventListener('click', function() {
+        performSearch('javni prijevoz');
+      });
+
+      document.getElementById('pharmacies-btn').addEventListener('click', function() {
+        performSearch('ljekarne');
+      });
+
+      document.getElementById('atms-btn').addEventListener('click', function() {
+        performSearch('bankomati');
+      });
+
+      document.getElementById('my-location-btn').addEventListener('click', showMyLocation);
+
+      document.getElementById('search-input').addEventListener('keypress', searchOnEnter);
+      document.getElementById('search-button').addEventListener('click', searchOnClick);
+    }
+  </script>
+</head>
+<body>
+  <h1>City Compass</h1>
+  <div id="map"></div>
+  <div id="search-container">
+    <input type="text" id="search-input" placeholder="Pretraži...">
+    <button id="search-button">Pretraži</button>
+  </div>
+  <div id="category-buttons">
+    <button id="restaurants-btn">Restorani</button>
+    <button id="notebooks-btn">Bilježnice</button>
+    <button id="recommendations-btn">Preporuke</button>
+    <button id="museum-btn">Muzej</button>
+    <button id="public-transport-btn">Javni prijevoz</button>
+    <button id="pharmacies-btn">Ljekarne</button>
+    <button id="atms-btn">Bankomati</button>
+  </div>
+  <div id="search-results">
+    <ul></ul>
+  </div>
+  <button id="my-location-btn">Prikaži moju lokaciju</button>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>
