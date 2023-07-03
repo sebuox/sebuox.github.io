@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>City Compass</title>
+  <title>Find Places Near Me</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
@@ -24,6 +24,12 @@
       text-align: center;
       margin-top: 20px;
       color: #fff;
+    }
+
+    #map {
+      height: 300px;
+      width: 100%;
+      margin-bottom: 20px;
     }
 
     #search-container {
@@ -79,12 +85,6 @@
       color: #007bff;
     }
 
-    #map {
-      height: 300px;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
     #search-results {
       width: 80%;
       background-color: rgba(255, 255, 255, 0.8);
@@ -105,6 +105,10 @@
       padding: 10px;
       border-radius: 5px;
     }
+
+    .dark-mode #search-results li {
+      background-color: #333;
+    }
   </style>
   <script>
     const API_KEY = 'AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A';
@@ -119,9 +123,8 @@
         zoom: 14
       });
 
-      directionsRenderer = new google.maps.DirectionsRenderer({
-        map: map
-      });
+      directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
 
       const service = new google.maps.places.PlacesService(map);
 
@@ -252,7 +255,6 @@
       document.getElementById('my-location-btn').addEventListener('click', showMyLocation);
 
       document.getElementById('search-input').addEventListener('keypress', searchOnEnter);
-
       document.getElementById('search-button').addEventListener('click', searchOnClick);
     }
 
@@ -263,7 +265,8 @@
   </script>
 </head>
 <body class="dark-mode">
-  <h1>City Compass</h1>
+  <div id="map"></div>
+  <h1>Find Places Near Me</h1>
   <div id="search-container">
     <input type="text" id="search-input" placeholder="Search...">
     <button id="search-button">Search</button>
@@ -278,7 +281,6 @@
     <button id="atms-btn">ATMs</button>
     <button id="my-location-btn">Show My Location</button>
   </div>
-  <div id="map"></div>
   <div id="search-results">
     <ul></ul>
   </div>
