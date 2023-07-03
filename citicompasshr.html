@@ -224,18 +224,28 @@
     }
 
     function createSearchResult(result) {
-      const ul = document.querySelector('#search-results ul');
-      const li = document.createElement('li');
-      li.textContent = result.name;
+  const ul = document.querySelector('#search-results ul');
+  const li = document.createElement('li');
+  li.textContent = result.name;
 
-      li.addEventListener('click', function () {
-        zoomToStreetView(result.geometry.location);
-        calculateRoute(result.geometry.location);
-        document.getElementById('maps-container').scrollIntoView({ behavior: 'smooth' });
-      });
+  // Check if opening_hours is available
+  if (result.opening_hours) {
+  const status = document.createElement('span');
+  status.textContent = ' - ' + (result.opening_hours.open_now ? 'Open' : 'Closed');
+  status.classList.add('status');
+  li.appendChild(status);
+}
 
-      ul.appendChild(li);
-    }
+  li.addEventListener('click', function () {
+    zoomToStreetView(result.geometry.location);
+    calculateRoute(result.geometry.location);
+    document.getElementById('maps-container').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  ul.appendChild(li);
+}
+
+
 
     function calculateRoute(destination) {
       if (navigator.geolocation) {
