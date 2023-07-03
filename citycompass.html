@@ -16,10 +16,6 @@
       background-size: cover;
     }
 
-    body.dark-mode {
-      background-color: rgba(0, 0, 0, 0.8);
-    }
-
     h1 {
       text-align: center;
       margin-top: 20px;
@@ -87,7 +83,7 @@
 
     #search-results {
       width: 80%;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(0, 0, 0, 0.3);
       padding: 10px;
       border-radius: 5px;
     }
@@ -106,7 +102,7 @@
       border-radius: 5px;
     }
 
-    .dark-mode #search-results li {
+    #search-results li:hover {
       background-color: #333;
     }
   </style>
@@ -257,14 +253,9 @@
       document.getElementById('search-input').addEventListener('keypress', searchOnEnter);
       document.getElementById('search-button').addEventListener('click', searchOnClick);
     }
-
-    function toggleDarkMode() {
-      const body = document.querySelector('body');
-      body.classList.toggle('dark-mode');
-    }
   </script>
 </head>
-<body class="dark-mode">
+<body>
   <div id="map"></div>
   <h1>City Compass</h1>
   <div id="search-container">
@@ -279,12 +270,10 @@
     <button id="public-transport-btn">Public Transport</button>
     <button id="pharmacies-btn">Pharmacies</button>
     <button id="atms-btn">ATMs</button>
-    <button id="my-location-btn">Show My Location</button>
   </div>
   <div id="search-results">
     <ul></ul>
   </div>
-  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
