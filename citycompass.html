@@ -63,6 +63,9 @@
       flex-wrap: wrap;
       justify-content: center;
       margin-bottom: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      border-radius: 5px;
     }
 
     #category-buttons button {
@@ -116,7 +119,7 @@
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 0, lng: 0},
-        zoom: 14
+        zoom: 15
       });
 
       directionsRenderer = new google.maps.DirectionsRenderer();
@@ -132,37 +135,30 @@
 
         document.getElementById('search-results').innerHTML = '';
 
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
+        const request = {
+          query: query
+        };
 
-          map.setCenter({lat: latitude, lng: longitude});
+        service.textSearch(request, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (let i = 0; i < results.length; i++) {
+              const place = results[i];
+              const marker = new google.maps.Marker({
+                position: place.geometry.location,
+                map: map
+              });
+              markers.push(marker);
 
-          const request = {
-            location: {lat: latitude, lng: longitude},
-            radius: '500',
-            query: query
-          };
-
-          service.textSearch(request, function(results, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-              for (let i = 0; i < results.length; i++) {
-                const place = results[i];
-                const marker = new google.maps.Marker({
-                  position: place.geometry.location,
-                  map: map
-                });
-                markers.push(marker);
-
-                const listItem = document.createElement('li');
-                listItem.textContent = place.name;
-                listItem.addEventListener('click', function() {
-                  showRoute(place.geometry.location);
-                });
-                document.getElementById('search-results').appendChild(listItem);
-              }
+              const listItem = document.createElement('li');
+              listItem.textContent = place.name;
+              listItem.addEventListener('click', function() {
+                showRoute(place.geometry.location);
+              });
+              document.getElementById('search-results').appendChild(listItem);
             }
-          });
+          } else {
+            alert('No results found for the query.');
+          }
         });
       }
 
@@ -256,8 +252,8 @@
   </script>
 </head>
 <body>
-  <div id="map"></div>
   <h1>City Compass</h1>
+  <div id="map"></div>
   <div id="search-container">
     <input type="text" id="search-input" placeholder="Search...">
     <button id="search-button">Search</button>
@@ -274,6 +270,7 @@
   <div id="search-results">
     <ul></ul>
   </div>
+  <button id="my-location-btn">Show My Location</button>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
