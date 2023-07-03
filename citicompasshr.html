@@ -28,6 +28,12 @@
       margin-bottom: 20px;
     }
 
+    #street-view {
+      height: 300px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
     #search-container {
       display: flex;
       flex-direction: column;
@@ -112,34 +118,43 @@
   <script>
     const API_KEY = 'AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A';
 
-    let markers = []; // Polje za spremanje markera
+    let markers = []; // Array for storing markers
     let map;
+    let streetView;
+    let directionsService;
     let directionsRenderer;
 
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 45.815, lng: 15.981},
-        zoom: 13
+        center: { lat: 0, lng: 0 },
+        zoom: 13,
+        styles: [
+          {
+            featureType: 'poi',
+            stylers: [{ visibility: 'off' }]
+          }
+        ]
       });
 
-      directionsRenderer = new google.maps.DirectionsRenderer();
-      directionsRenderer.setMap(map);
+      streetView = new google.maps.StreetViewPanorama(document.getElementById('street-view'));
+
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer({
+        map: map,
+        panel: document.getElementById('directions-panel')
+      });
 
       const service = new google.maps.places.PlacesService(map);
 
       function performSearch(query) {
-        markers.forEach(function(marker) {
-          marker.setMap(null);
-        });
-        markers = [];
-
-        document.getElementById('search-results').innerHTML = '';
+        clearMarkers();
+        clearSearchResults();
 
         const request = {
           query: query
         };
 
-        service.textSearch(request, function(results, status) {
+        service.textSearch(request, function (results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (let i = 0; i < results.length; i++) {
               const place = results[i];
@@ -151,8 +166,9 @@
 
               const listItem = document.createElement('li');
               listItem.textContent = place.name;
-              listItem.addEventListener('click', function() {
-                showRoute(place.geometry.location);
+              listItem.addEventListener('click', function () {
+                showStreetView(place.geometry.location);
+                calculateAndDisplayRoute(place.geometry.location);
               });
               document.getElementById('search-results').appendChild(listItem);
             }
@@ -162,42 +178,64 @@
         });
       }
 
-      function showRoute(destination) {
-        directionsRenderer.setDirections({routes: []});
-
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
-
-          const directionsService = new google.maps.DirectionsService();
-
-          const request = {
-            origin: {lat: latitude, lng: longitude},
-            destination: destination,
-            travelMode: google.maps.TravelMode.DRIVING
-          };
-
-          directionsService.route(request, function(result, status) {
-            if (status === google.maps.DirectionsStatus.OK) {
-              directionsRenderer.setDirections(result);
-            }
-          });
+      function clearMarkers() {
+        markers.forEach(function (marker) {
+          marker.setMap(null);
         });
+        markers = [];
+      }
+
+      function clearSearchResults() {
+        document.getElementById('search-results').innerHTML = '';
+      }
+
+      function showStreetView(location) {
+        streetView.setPosition(location);
+      }
+
+      function calculateAndDisplayRoute(destination) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            const origin = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            directionsService.route(
+              {
+                origin: origin,
+                destination: destination,
+                travelMode: 'DRIVING'
+              },
+              function (response, status) {
+                if (status === 'OK') {
+                  directionsRenderer.setDirections(response);
+                } else {
+                  alert('Nije moguće izračunati rutu.');
+                }
+              }
+            );
+          });
+        } else {
+          alert('Geolokacija nije podržana u ovom pregledniku.');
+        }
       }
 
       function showMyLocation() {
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
+          navigator.geolocation.getCurrentPosition(function (position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
-            map.setCenter({lat: latitude, lng: longitude});
+            map.setCenter({ lat: latitude, lng: longitude });
 
             const marker = new google.maps.Marker({
-              position: {lat: latitude, lng: longitude},
+              position: { lat: latitude, lng: longitude },
               map: map,
               title: 'Moja lokacija'
             });
+
+            showStreetView({ lat: latitude, lng: longitude });
           });
         } else {
           alert('Geolokacija nije podržana u ovom pregledniku.');
@@ -216,43 +254,47 @@
         performSearch(searchQuery);
       }
 
-      document.getElementById('restaurants-btn').addEventListener('click', function() {
-        performSearch('restorani');
+      document.getElementById('restaurants-btn').addEventListener('click', function () {
+        performSearch('Restorani');
       });
 
-      document.getElementById('notebooks-btn').addEventListener('click', function() {
-        performSearch('bilježnice');
+      document.getElementById('notebooks-btn').addEventListener('click', function () {
+        performSearch('Bilježnice');
       });
 
-      document.getElementById('recommendations-btn').addEventListener('click', function() {
-        performSearch('preporuke');
+      document.getElementById('recommendations-btn').addEventListener('click', function () {
+        performSearch('Preporuke');
       });
 
-      document.getElementById('museum-btn').addEventListener('click', function() {
-        performSearch('muzej');
+      document.getElementById('museum-btn').addEventListener('click', function () {
+        performSearch('Muzej');
       });
 
-      document.getElementById('public-transport-btn').addEventListener('click', function() {
-        performSearch('javni prijevoz');
+      document.getElementById('public-transport-btn').addEventListener('click', function () {
+        performSearch('Javni prijevoz');
       });
 
-      document.getElementById('pharmacies-btn').addEventListener('click', function() {
-        performSearch('ljekarne');
+      document.getElementById('pharmacies-btn').addEventListener('click', function () {
+        performSearch('Ljekarne');
       });
 
-      document.getElementById('atms-btn').addEventListener('click', function() {
-        performSearch('bankomati');
+      document.getElementById('atms-btn').addEventListener('click', function () {
+        performSearch('Bankomati');
       });
 
-      document.getElementById('search-input').addEventListener('keyup', searchOnEnter);
+      document.getElementById('search-input').addEventListener('keydown', searchOnEnter);
+
       document.getElementById('search-button').addEventListener('click', searchOnClick);
+
       document.getElementById('my-location-btn').addEventListener('click', showMyLocation);
     }
   </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places&callback=initMap" async defer></script>
 </head>
 <body>
   <h1>City Compass</h1>
   <div id="map"></div>
+  <div id="street-view"></div>
   <div id="search-container">
     <input type="text" id="search-input" placeholder="Pretraži...">
     <button id="search-button">Pretraži</button>
@@ -270,6 +312,5 @@
     <ul></ul>
   </div>
   <button id="my-location-btn">Prikaži moju lokaciju</button>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzTXkxuhorrftjjxil5A4yM0YECjQWH9A&libraries=places&callback=initMap" async defer></script>
 </body>
 </html>
