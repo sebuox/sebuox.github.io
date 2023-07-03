@@ -130,9 +130,14 @@
     }
 
     #directions-panel {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #000000;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  #directions-panel * {
+    color: #ffffff;
   }
 
     #my-location-btn {
@@ -313,7 +318,7 @@
   </div>
   <div id="category-buttons">
     <button onclick="performSearch('Restorani')">Restorani</button>
-    <button onclick="performSearch('Beležnice')">Beležnice</button>
+    <button onclick="performSearch('Knjižare')">Knjižara</button>
     <button onclick="performSearch('Preporuke')">Preporuke</button>
     <button onclick="performSearch('Muzeji')">Muzeji</button>
     <button onclick="performSearch('Javni prijevoz')">Javni prijevoz</button>
