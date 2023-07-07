@@ -137,6 +137,12 @@
     }
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7008263050189173" crossorigin="anonymous"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-7008263050189173",
+      enable_page_level_ads: true
+    });
+  </script>
 </head>
 <body>
   <div class="container">
@@ -145,21 +151,7 @@
       <input type="text" id="searchInput" placeholder="Pretraži" autocomplete="off">
       <input type="submit" value="Pretraži">
     </form>
-    <div id="searchResults" class="searchResults">
-      <!-- Insert your AdSense ad unit here -->
-      <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7008263050189173"
-         data-ad-slot="1420769865"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-      <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-    </div>
-  </div>
-
-  <div class="modeSwitch">
+    <div class="modeSwitch">
     <label for="darkModeToggle">Tamni način</label>
     <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
   </div>
@@ -168,43 +160,7 @@
     function performSearch(event) {
       event.preventDefault();
       const searchQuery = document.getElementById('searchInput').value;
-      const googleSearchUrl = 'https://www.google.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno akcija');
-      const bingSearchUrl = 'https://www.bing.com/search?q=' + encodeURIComponent(searchQuery + ' povoljno akcija');
-      const duckDuckGoSearchUrl = 'https://duckduckgo.com/?q=' + encodeURIComponent(searchQuery + ' povoljno akcija');
-      const youtubeSearchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(searchQuery + ' recenzija');
-
-      const searchResultsDiv = document.getElementById('searchResults');
-      searchResultsDiv.innerHTML = '';
-
-      const youtubeLink = createSearchLink('Video zapisi', youtubeSearchUrl, 'https://dreamshare.pages.dev/youtube.png');
-      searchResultsDiv.appendChild(youtubeLink);
-
-      const googleLink = createSearchLink('Google', googleSearchUrl, 'https://dreamshare.pages.dev/google.png');
-      searchResultsDiv.appendChild(googleLink);
-
-      const bingLink = createSearchLink('Bing', bingSearchUrl, 'https://dreamshare.pages.dev/bing.png');
-      searchResultsDiv.appendChild(bingLink);
-
-      const duckDuckGoLink = createSearchLink('DuckDuckGo', duckDuckGoSearchUrl, 'https://dreamshare.pages.dev/DuckDuckGo.png');
-      searchResultsDiv.appendChild(duckDuckGoLink);
-    }
-
-    function createSearchLink(engineName, searchUrl, iconSrc) {
-      const link = document.createElement('a');
-      link.href = searchUrl;
-      link.target = '_blank';
-      link.classList.add('searchLink');
-
-      const icon = document.createElement('img');
-      icon.src = iconSrc;
-      icon.alt = engineName;
-
-      const text = document.createElement('span');
-      text.textContent = engineName;
-
-      link.appendChild(icon);
-      link.appendChild(text);
-      return link;
+      // Perform search functionality here
     }
 
     function toggleDarkMode() {
