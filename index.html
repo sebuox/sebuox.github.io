@@ -136,6 +136,7 @@
       color: #fff;
     }
   </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7008263050189173" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="container">
@@ -144,7 +145,18 @@
       <input type="text" id="searchInput" placeholder="Pretraži" autocomplete="off">
       <input type="submit" value="Pretraži">
     </form>
-    <div id="searchResults" class="searchResults"></div>
+    <div id="searchResults" class="searchResults">
+      <!-- Insert your AdSense ad unit here -->
+      <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7008263050189173"
+         data-ad-slot="YOUR_AD_SLOT_ID"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+      <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
   </div>
 
   <div class="modeSwitch">
@@ -187,7 +199,7 @@
       icon.src = iconSrc;
       icon.alt = engineName;
 
-      const text = document.createElement('span');
+      const text= document.createElement('span');
       text.textContent = engineName;
 
       link.appendChild(icon);
