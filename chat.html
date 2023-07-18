@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Client</title>
+    <script>
+        function send_message() {
+            var message = document.getElementById("input_text").value.trim();
+            if (message) {
+                var nickname = document.getElementById("nickname_entry").value.trim();
+                var server_host = document.getElementById("server_host_entry").value.trim();
+                var server_port = document.getElementById("server_port_entry").value.trim();
+                var cmd = `echo "${nickname}: ${message}" | nc ${server_host} ${server_port}`;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/send", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("cmd=" + encodeURIComponent(cmd));
+                document.getElementById("input_text").value = "";
+            }
+        }
+
+        function append_message(message) {
+            var message_text = document.getElementById("message_text");
+            var parts = message.split(":");
+            var user = parts[0].trim();
+            var content = parts.slice(1).join(":").trim();
+            if (user === document.getElementById("nickname_entry").value.trim()) {
+                user = "You";
+            }
+            message_text.innerHTML += user + ": " + content + "<br>";
+            message_text.scrollTop = message_text.scrollHeight;
+        }
+
+        function connect_to_server() {
+            var nickname = document.getElementById("nickname_entry").value.trim();
+            var server_host = document.getElementById("server_host_entry").value.trim();
+            var server_port = document.getElementById("server_port_entry").value.trim();
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/connect", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    document.getElementById("connect_button").disabled = true;
+                    document.getElementById("disconnect_button").disabled = false;
+                    document.getElementById("input_text").disabled = false;
+                    document.getElementById("send_button").disabled = false;
+                }
+            };
+            xhr.send("nickname=" + encodeURIComponent(nickname) +
+                     "&server_host=" + encodeURIComponent(server_host) +
+                     "&server_port=" + encodeURIComponent(server_port));
+        }
+
+        function disconnect() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/disconnect", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    document.getElementById("connect_button").disabled = false;
+                    document.getElementById("disconnect_button").disabled = true;
+                    document.getElementById("input_text").disabled = true;
+                    document.getElementById("send_button").disabled = true;
+                }
+            };
+            xhr.send();
+        }
+
+        function receive_messages() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/receive", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var response = xhr.responseText.trim();
+                    if (response) {
+                        append_message(response);
+                    }
+                    setTimeout(receive_messages, 10);
+                }
+            };
+            xhr.send();
+        }
+
+        window.onload = function () {
+            document.getElementById("connect_button").onclick = connect_to_server;
+            document.getElementById("disconnect_button").onclick = disconnect;
+            document.getElementById("send_button").onclick = send_message;
+            setTimeout(receive_messages, 10);
+        };
+    </script>
+</head>
+<body>
+    <h1>Chat Client</h1>
+    <div>
+        <label for="server_host_entry">Server Host:</label>
+        <input type="text" id="server_host_entry" />
+    </div>
+    <div>
+        <label for="server_port_entry">Server Port:</label>
+        <input type="text" id="server_port_entry" />
+    </div>
+    <div>
+        <label for="nickname_entry">Nickname:</label>
+        <input type="text" id="nickname_entry" />
+    </div>
+    <div>
+        <button id="connect_button">Connect</button>
+        <button id="disconnect_button" disabled>Disconnect</button>
+    </div>
+    <div>
+        <input type="text" id="input_text" disabled />
+        <button id="send_button" disabled>Send</button>
+    </div>
+    <div id="message_text"></div>
+</body>
+</html>
