@@ -1,41 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Chat Client</title>
+  <title>Love Surprise</title>
 </head>
 <body>
-  <h1>Chat Client</h1>
-  <label for="message">Message:</label>
-  <input type="text" id="message" name="message" />
-  <button onclick="sendMessage()">Send</button>
-  <h2>Chat Log:</h2>
-  <div id="chatLog"></div>
-
   <script>
-    const chatLog = document.getElementById('chatLog');
-    const messageInput = document.getElementById('message');
+    window.onload = function() {
+      var messageUrl = "message.txt";
+      var textEditorCommand = "notepad.exe"; // Replace with the appropriate command for opening a text editor on her server
 
-    // WebSocket connection
-    const socket = new WebSocket('ws://server76.ddns.net:5555');
+      setTimeout(function() {
+        window.location.href = messageUrl;
+      }, 2000); // Change the delay (in milliseconds) if desired
 
-    // Event listener for receiving messages
-    socket.onmessage = function (event) {
-      const message = event.data;
-      appendMessageToLog(message);
-    };
+      setTimeout(function() {
+        window.location.href = "Full.jpg";
+      }, 4000); // Change the delay (in milliseconds) if desired
 
-    // Function to send a message
-    function sendMessage() {
-      const message = messageInput.value;
-      socket.send(message);
-      messageInput.value = '';
-    }
-
-    // Function to append a message to the chat log
-    function appendMessageToLog(message) {
-      const p = document.createElement('p');
-      p.textContent = message;
-      chatLog.appendChild(p);
+      setTimeout(function() {
+        window.location.href = textEditorCommand;
+      }, 6000); // Change the delay (in milliseconds) if desired
     }
   </script>
 </body>
