@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Love Surprise</title>
+    <title>Chat Client</title>
 </head>
 <body>
-  <script>
-    window.onload = function() {
-      var messageUrl = "message.txt";
-      var textEditorCommand = "notepad.exe"; // Replace with the appropriate command for opening a text editor on her server
+    <div id="chat-box"></div>
+    <input type="text" id="message-input" placeholder="Type your message here...">
+    <button onclick="sendMessage()">Send</button>
 
-      setTimeout(function() {
-        window.location.href = messageUrl;
-      }, 2000); // Change the delay (in milliseconds) if desired
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.querySelector('button');
 
-      setTimeout(function() {
-        window.location.href = "Full.jpg";
-      }, 4000); // Change the delay (in milliseconds) if desired
+        const socket = new WebSocket('ws://server76.ddns.net:4444');
 
-      setTimeout(function() {
-        window.location.href = textEditorCommand;
-      }, 6000); // Change the delay (in milliseconds) if desired
-    }
-  </script>
+        socket.onopen = () => {
+            console.log('Connected to server.');
+        };
+
+        socket.onmessage = (event) => {
+            const message = event.data;
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+        };
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message !== '') {
+                socket.send(message);
+                messageInput.value = '';
+            }
+        }
+    </script>
 </body>
 </html>
