@@ -26,6 +26,10 @@
             chatBox.appendChild(messageElement);
         };
 
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
         function sendMessage() {
             const message = messageInput.value.trim();
             if (message !== '') {
