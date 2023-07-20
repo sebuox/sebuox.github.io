@@ -13,7 +13,7 @@
         const messageInput = document.getElementById('message-input');
         const sendButton = document.querySelector('button');
 
-        const socket = new WebSocket('ws://server76.ddns.net:4444');  // Update the WebSocket URL here
+        const socket = new WebSocket('ws://server76.ddns.net:4444');
 
         socket.onopen = () => {
             console.log('Connected to server.');
@@ -28,6 +28,10 @@
 
         socket.onerror = (error) => {
             console.error('WebSocket error:', error);
+        };
+
+        socket.onclose = () => {
+            console.log('Connection closed.');
         };
 
         function sendMessage() {
